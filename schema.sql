@@ -17,6 +17,7 @@ CREATE TABLE goods (
   tag VARCHAR(10) NOT NULL CHECK (tag in ('XS','S','M','L','XL')),
   size VARCHAR(2) NOT NULL CHECK (size in ('top', 'bottom', 'dress', 'other')),
   description TEXT,
+  comment VARCHAR(128),
   timestamp INTEGER NOT NULL DEFAULT (datetime('now')),
 
   FOREIGN KEY(user_id) REFERENCES users(id)
