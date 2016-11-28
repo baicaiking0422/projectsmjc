@@ -144,7 +144,7 @@ app.get('/items', function(req, res){
     if (price == "Under $100"){
       sql = "SELECT name, id, picture FROM goods WHERE price <= 100";
     } else if (price == "$100 - $200"){
-      sql = "SELECT name,i d, picture FROM goods WHERE price > 100 and price <= 200";
+      sql = "SELECT name, id, picture FROM goods WHERE price > 100 and price <= 200";
     } else if (price == "$200 - $300"){
       sql = "SELECT name, id, picture FROM goods WHERE price > 200 and price <= 300";
     } else if (price == "$300 - $400"){
