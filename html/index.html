@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <h1>Second Hand Shopping</h1>
+    <p class="lead">This is a shopping website for second hand exchange.</p>
+
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Search for...">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Go!</button>
+      </span>
+    </div><!-- /input-group -->
+   </br>
+
+
+ <!--  <ul class="nav nav-pills col-xs-6" id="indexNav">
+  <li role="presentation"><a href="/items?tag=all">All</a></li>
+  <li role="presentation"><a href="/items?tag=top">Tops</a></li>
+  <li role="presentation"><a href="/items?tag=bottom">Bottoms</a></li>
+  <li role="presentation"><a href="/items?tag=dress">Dresses</a></li>
+  <li role="presentation"><a href="/items?tag=other">Others</a></li>
+  </ul> -->
+
+ <div class="col-xs-3" id="menu">
+      <select multiple class="form-control" id="tag">
+        <option>All</option>
+        <option>Top</option>
+        <option>Bottom</option>
+        <option>Dress</option>
+        <option>Other</option>
+      </select>
+  </div>
+  <!-- <ul class="nav nav-pills col-xs-6" id="indexFilters">
+  <li role="presentation"><a href="#">Filters</a></li>
+  <li role="presentation" class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+      Size <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+      <li><a href="#result">XS</a></li>
+      <li><a href="#result">S</a></li>
+      <li><a href="#result">M</a></li>
+      <li><a href="#result">L</a></li>
+      <li><a href="#result">XL</a></li>
+    </ul>
+  </li>
+  <li role="presentation" class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+      Price <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+      <li><a href="#result">Under $100</a></li>
+      <li><a href="#result">$100 - $200</a></li>
+      <li><a href="#result">$200 - $300</a></li>
+      <li><a href="#result">$300 - $400</a></li>
+      <li><a href="#result">over $400</a></li>
+    </ul>
+  </li>
+  </ul> -->
+
+  <div id="filters" class="row col-xs-9">
+  <div class="form-group">
+  <div class="col-xs-2">size</div>
+  <select class="form-control col-xs-2" id="size">
+    <option>all</option>
+    <option>XS</option>
+    <option>S</option>
+    <option>M</option>
+    <option>L</option>
+    <option>XL</option>
+  </select>
+</div>
+<div class="form-group">
+<div class="col-xs-2">price</div>
+  <select class="form-control" id="price">
+    <option>all</option>
+    <option>Under $100</option>
+    <option>$100 - $200</option>
+    <option>$300 - $400</option>
+    <option>over $400</option>
+  </select>
+</div>
+</div>
+
+
+<div id="indexResult">
+ <!--  <div class="row" id="items">
+    <div class="item col-sm-4"><img src="img/banana1.jpg"></div>
+    <div class="item col-sm-4"><img src="img/banana2.jpg"></div>
+    <div class="item col-sm-4"><img src="img/banana3.jpg"></div>
+  </div>
+  <div class="row" id="items">
+    <div class="item col-sm-4"><img src="img/banana4.jpg"></div>
+    <div class="item col-sm-4"><img src="img/banana5.jpg"></div>
+    <div class="item col-sm-4"><img src="img/banana6.jpg"></div>
+  </div>
+  <div class="row" id="items">
+    <div class="item col-sm-4"><img src="img/banana7.jpg"></div>
+    <div class="item col-sm-4"><img src="img/banana8.jpg"></div>
+    <div class="item col-sm-4"><img src="img/banana9.jpg"></div>
+  </div> --></div>
+
+  <nav aria-label="...">
+  <ul class="pager">
+    <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span> Older</a></li>
+    <li class="next"><a href="#">Newer <span aria-hidden="true">&rarr;</span></a></li>
+  </ul>
+</nav>
+
+<script src="js/index.js"></script>
+{% endblock %}
