@@ -64,11 +64,17 @@ $(document).ready(function(){
 
 				link.href = "#";
 				link.className = "thumbnail";
-				let img = document.createElement("img");
-				img.src = "img/" + pictureName + ".jpg";
+				if (pictureName == null){
+					let imgPlaceHolder = document.createElement("img");
+					imgPlaceHolder.src = "img/item.jpg";
+					link.appendChild(imgPlaceHolder);
+				}else{
+					let img = document.createElement("img");
+					img.src = "img/" + pictureName + ".jpg";
+					link.appendChild(img);
+				}
 				let name = document.createElement("p");
 				name.innerHTML = items[index]["name"];
-				link.appendChild(img);
 				link.appendChild(name);
 				node.appendChild(link);
 				par.appendChild(node);
