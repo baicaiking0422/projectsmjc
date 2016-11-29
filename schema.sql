@@ -49,17 +49,17 @@ INSERT INTO users (username, password, is_admin) VALUES ('xinyan', '$2a$10$CiNxJ
 INSERT INTO users (id, username, password, is_admin) VALUES (5, '1p','$2a$10$RW0wv3ZqL9SaRUFL7PvNvepJXFMMuenmXmLmK8vxqZGmWkKTolI9i',0);
 INSERT INTO users (id, username, password, is_admin) VALUES (6, '2p','$2a$10$zsD3aTLRYeM9593i4.DBB./zHTsMa0XvSzlZv/4T2r2cZHpW0twqK',0);
 
-INSERT INTO goods (id,user_id,name,price,tag,size,description,bought) VALUES (999,5,'Banana',12,'Other','M','Imported',1);
-INSERT INTO goods (id,user_id,name,price,tag,size,description,bought) VALUES (989,5,'Banana-2',10,'Top','XL','Imported',1);
-INSERT INTO goods (id,user_id,name,price,tag,size,description,comments,bought) VALUES (979,6,'Banana-3',10,'Top','XL','Imported','Good Banana',0);
-INSERT INTO goods (id,user_id,name,price,tag,size,description,comments,bought) VALUES (969,6,'Apple',10,'Top','XL','Imported','NICE apple',0);
+INSERT INTO goods (id,user_id,name,price,tag,size,rate_if,description,bought) VALUES (999,5,'Banana',12,'Other','M',0,'Imported',1);
+INSERT INTO goods (id,user_id,name,price,tag,size,rate_if,description,bought) VALUES (989,5,'Banana-2',10,'Top','XL',0,'Imported',1);
+INSERT INTO goods (id,user_id,name,price,tag,size,rate_if,description,comments,bought) VALUES (979,6,'Banana-3',10,'Top','XL',0,'Imported','Good Banana',0);
+INSERT INTO goods (id,user_id,name,price,tag,size,rate_if,description,comments,bought) VALUES (969,6,'Apple',10,'Top','XL',0,'Imported','NICE apple',0);
 
-INSERT INTO goods (name, price, tag, size, picture, description,bought) VALUES ('A', '40', 'Top', 'XS', 'item', 'ABC',1);
-INSERT INTO goods (name, price, tag, size, picture, description,bought) VALUES ('B', '40', 'Bottom', 'S', 'item', 'DEF',1);
-INSERT INTO goods (name, price, tag, size, picture, description,bought) VALUES ('C', '140', 'Dress', 'M', 'item', 'ABC',1);
-INSERT INTO goods (name, price, tag, size, picture, description,bought) VALUES ('D', '140', 'Top', 'L', 'item','DEF',1);
-INSERT INTO goods (name, price, tag, size, picture, description,bought) VALUES ('E', '240', 'Other', 'XL', 'item', 'GHI',1);
-INSERT INTO goods (name, price, tag, size, picture, description,bought) VALUES ('F', '240', 'Dress', 'XS', 'item', 'ABC',1);
-INSERT INTO goods (name, price, tag, size, picture, description,bought) VALUES ('G', '340', 'Top', 'S', 'item', 'GHI',1);
-INSERT INTO goods (name, price, tag, size, picture, description,bought) VALUES ('H', '440', 'Bottom', 'M', 'item', 'DEF',1);
-INSERT INTO goods (name, price, tag, size, picture, description,bought) VALUES ('I', '540', 'Other', 'XL', 'item', 'ABCDEF',1);
+INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('A', '40', 'Top', 'XS', 'item', 0,'ABC',1);
+INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('B', '40', 'Bottom', 'S', 'item', 0,'DEF',1);
+INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('C', '140', 'Dress', 'M', 'item', 0,'ABC',1);
+INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('D', '140', 'Top', 'L', 'item',0,'DEF',1);
+INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('E', '240', 'Other', 'XL', 'item', 0,'GHI',1);
+INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('F', '240', 'Dress', 'XS', 'item', 0,'ABC',1);
+INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('G', '340', 'Top', 'S', 'item', 0,'GHI',1);
+INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('H', '440', 'Bottom', 'M', 'item', 0,'DEF',1);
+INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('I', '540', 'Other', 'XL', 'item', 0,'ABCDEF',1);
