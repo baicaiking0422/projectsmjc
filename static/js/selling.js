@@ -1,9 +1,22 @@
 $(document).ready(function() {
 	refresh_comments();
-	//setInterval(15000,refresh_comments);
 
-	//But item
-	//Chat with seller
+	$("#buythis").click(function(){
+		var id = $(this).attr("name");
+		console.log(id);
+		$.ajax({
+			url: "/buy?item_id=" + id,
+			type: "POST",
+			success: function(response){
+				console.log(response);
+				if (response == "Not Reg") {
+					console.log("not reg");
+					// TODO: 弹窗
+				}
+			}
+		});
+	});
+
 });
 
 function refresh_comments(){
