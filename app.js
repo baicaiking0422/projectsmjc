@@ -218,4 +218,114 @@ app.get('/items', function(req, res){
   //var result = {"items": re};
 });
 
+//=========Zhujun Wang===Start=========
+//Get comments for particular seller
+app.get('/comments',function(req,res){
+  var user_id = req.query.id;
+  db.all("SELECT goods.name, users.username, goods.comments, CAST((julianday(datetime('now')) - julianday(goods.timestamp))*24 AS integer) AS days_ago " + 
+    "FROM users, goods WHERE users.id = goods.user_id AND users.id = ? AND goods.bought = 0 " + 
+    "ORDER BY goods.timestamp DESC LIMIT 10",[user_id], function(err,rows){
+      if(err){
+        throw err;
+      }
+      res.json(rows);
+  });
+});
+
+
+
+//Add comment for each item
+app.post('/comments',function(req,res){
+  var item_id = req.query.id;
+  console.log("post id:" + item_id);
+  var rating = req.body.rating;
+  console.log("rating: " + rating);
+  var comment = req.body.comment.substring(0,128);
+  console.log("comment: "+comment);
+  
+  var query = 'UPDATE  goods SET comments = ?, rate = ?, rate_if = 1 WHERE id = ?';
+  var placeholders = [comment, rating, item_id];
+
+  // if (rating == null || comment==null){
+  //   res.render('feedback.html');
+  //   //return;
+  // }
+  // else{
+    db.run(query, placeholders, function(err) {
+        if(err) {
+          console.log(err);
+          //res.sendStatus(500);
+        } else {
+          //res.sendStatus(200);
+          //console.log("??????");
+          res.redirect('/');
+          console.log("??????");
+          //return;
+        }
+    }); 
+  // }
+  //res.render('index.html');
+});
+
+//redirect to chat page
+app.get('/chatpage',function(req,res){
+  var seller_id = req.query.id;
+  if (req.session.username !== undefined) {
+    res.redirect('/');
+    return;
+  }
+
+  res.render('signin.html');
+});
+
+// update item info
+app.post('/buy',function(req,res){
+  //not login cannot buy
+  var item_id = req.query.id;
+  console.log(item_id);
+  if (req.session.user_id !== undefined) {
+    db.all('SELECT bought FROM goods WHERE id = ?', [item_id], function(err,row){
+      // already sold
+      if (row.bought == 0) {
+        callback('Sold.');
+        return;
+      }
+      // not sold, update 1 to 0
+      else {
+        db.run('UPDATE goods SET bought = 0 WHERE id = ?', [item_id], function(err){
+          if(err) {
+            console.log(err);
+            res.sendStatus(500);
+          } else {
+            res.sendStatus(200);
+          }
+        });
+        // redirect to main page or user_info page?
+        res.redirect('/');
+      }
+    });
+    
+  } 
+  // not login yet , please log in
+  else {
+    res.redirect('/');
+  }
+});
+
+app.get('/good', function(req, res,next) {
+  var item_id = req.query.id;
+  db.all("SELECT * FROM goods WHERE goods.id = ? ",[item_id],function(err,rows){
+      if(err){
+        throw err;
+      }
+      console.log(rows[0]);
+      var row = rows[0];
+      //res.json(rows);
+      //res.render('goods.html', {data:row});
+     // res.render('sellinggoods.html',{data: row});
+      res.render('feedback.html',{data: row});
+  });
+});
+//=========Zhujun Wang===End====
+
 //db.close();
