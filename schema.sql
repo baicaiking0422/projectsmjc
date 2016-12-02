@@ -46,20 +46,22 @@ INSERT INTO users (username, password, is_admin) VALUES ('minhua', '$2a$10$Y5Gmd
 INSERT INTO users (username, password, is_admin) VALUES ('zhujun', '$2a$10$9u5ozAyJWkmZnJ4rSHhRlOXupPI144NP3px0uGboVAMH4oPQLvkmO', 1);
 INSERT INTO users (username, password, is_admin) VALUES ('xinyan', '$2a$10$CiNxJ.OtQc9/DKiRX79Z3OfglNcAhDC9GCxbxovOCA0JSkjxvV9eS', 1);
 
-INSERT INTO users (id, username, password, is_admin) VALUES (5, '1p','$2a$10$RW0wv3ZqL9SaRUFL7PvNvepJXFMMuenmXmLmK8vxqZGmWkKTolI9i',0);
-INSERT INTO users (id, username, password, is_admin) VALUES (6, '2p','$2a$10$zsD3aTLRYeM9593i4.DBB./zHTsMa0XvSzlZv/4T2r2cZHpW0twqK',0);
+INSERT INTO users (id, username, password, currency, is_admin) VALUES (5, '1p','$2a$10$RW0wv3ZqL9SaRUFL7PvNvepJXFMMuenmXmLmK8vxqZGmWkKTolI9i', 40, 0);
+INSERT INTO users (id, username, password, currency, is_admin) VALUES (6, '2p','$2a$10$zsD3aTLRYeM9593i4.DBB./zHTsMa0XvSzlZv/4T2r2cZHpW0twqK',20, 0);
 
-INSERT INTO goods (id,user_id,name,price,tag,size,rate_if,description,bought) VALUES (999,5,'Banana',12,'Other','M',0,'Imported',1);
-INSERT INTO goods (id,user_id,name,price,tag,size,rate_if,description,bought) VALUES (989,5,'Banana-2',10,'Top','XL',0,'Imported',1);
-INSERT INTO goods (id,user_id,name,price,tag,size,rate_if,description,comments,bought) VALUES (979,6,'Banana-3',10,'Top','XL',0,'Imported','Good Banana',0);
-INSERT INTO goods (id,user_id,name,price,tag,size,rate_if,description,comments,bought) VALUES (969,6,'Apple',10,'Top','XL',0,'Imported','NICE apple',0);
+INSERT INTO goods (id,user_id,name,price,tag,size, picture, rate_if,description,bought) VALUES (999,6,'Bomber',32,'Top','M','t5.png', 0,'A high-polish pin with a deck of cards graphic, as well as a longline silhouette, front zipper, front slant pockets, a quilted lining, long sleeves with one zippered utility pocket, and ribbed trim.',1);
+INSERT INTO goods (id,user_id,name,price,tag,size, picture, rate_if,description,bought) VALUES (989,5,'Pink Cardigans',10,'Top','L','t4.png',0,'A knit cardigan featuring an open front, long sleeves, and a slight high-low hem.',1);
+INSERT INTO goods (id,user_id,name,price,tag,size, picture, rate_if,description,comments,bought) VALUES (979,5,'Vintage Jean',10,'Bottom','XL','b5.png',0,'Imported Banana.','Fit well.',0);
+INSERT INTO goods (id,user_id,name,price,tag,size, picture, rate_if,description,comments,bought) VALUES (969,5,'Overall',12,'Bottom','M','b3.png',0,'Imported Apple','Love the material and color',0);
+INSERT INTO goods (id,user_id,name,price,tag,size, picture, rate_if,description,comments,bought) VALUES (959,6,'Navy legging',13,'Bottom','S','b4.png',0,'Imported','A little bit tight.',0);
+INSERT INTO goods (id,user_id,name,price,tag,size, picture, rate_if,description,comments,bought) VALUES (949,6,'White-start slipper',25,'Other','S','o3.png',0,'white stars slipper','It is very cute and warm!',0);
 
-INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('A', '40', 'Top', 'XS', 'item', 0,'ABC',1);
-INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('B', '40', 'Bottom', 'S', 'item', 0,'DEF',1);
-INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('C', '140', 'Dress', 'M', 'item', 0,'ABC',1);
-INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('D', '140', 'Top', 'L', 'item',0,'DEF',1);
-INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('E', '240', 'Other', 'XL', 'item', 0,'GHI',1);
-INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('F', '240', 'Dress', 'XS', 'item', 0,'ABC',1);
-INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('G', '340', 'Top', 'S', 'item', 0,'GHI',1);
-INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('H', '440', 'Bottom', 'M', 'item', 0,'DEF',1);
-INSERT INTO goods (name, price, tag, size, picture, rate_if,description,bought) VALUES ('I', '540', 'Other', 'XL', 'item', 0,'ABCDEF',1);
+INSERT INTO goods (id, user_id, name, price, tag, size, picture, rate_if, description,bought) VALUES (939,6,'High-rise jean', '22', 'Bottom', 'XS', 'b1.png', 0,'Mid-washed jean',1);
+INSERT INTO goods (id, user_id, name, price, tag, size, picture, rate_if, description,bought) VALUES (929,6,'Black dress', '32', 'Dress', 'S', 'd1.png', 0,'A marled ribbed knit swing dress featuring a mock neckline and long sleeves.',1);
+INSERT INTO goods (id, user_id, name, price, tag, size, picture, rate_if, description,bought) VALUES (919,5,'Grey Dress', '20', 'Dress', 'L', 'd2.png', 0,'A marled ribbed knit swing dress featuring a mock neckline and long sleeves.',1);
+INSERT INTO goods (id, user_id, name, price, tag, size, picture, rate_if, description,bought) VALUES (909,6,'Sweatshirt', '20', 'Top', 'XS', 't1.png',0,' A French terry sweatshirt featuring short dolman sleeves, a chest pocket, raw-cut hem, side slits, and a round neckline.',1);
+INSERT INTO goods (id, user_id, name, price, tag, size, picture, rate_if, description,bought) VALUES (899,5,'Mini backpack', '42', 'Other', 'M', 'o1.png', 0,'A structured mini backpack featuring a drawstring closure, a flap top with twin faux leather buckles and snap button closures, fabric adjustable straps, an interior zip pocket, two side-zip pockets, one center-front zip pocket, and high polish accents.',1);
+INSERT INTO goods (id, user_id, name, price, tag, size, picture, rate_if, description,bought) VALUES (889,5,'Christmas slipper', '22', 'Other', 'XS', 'o2.png', 0,'Christmas slipper',1);
+INSERT INTO goods (id, user_id, name, price, tag, size, picture, rate_if, description,bought) VALUES (879,6,'Knit Hoodie', '23', 'Top', 'S', 't2.png', 0,'An oversized knit hoodie featuring a fleece lining, drawstring hood, long sleeves, a kangaroo pocket, and ribbed trim.',1);
+INSERT INTO goods (id, user_id, name, price, tag, size, picture, rate_if, description,bought) VALUES (869,6,'Cardigan in grey', '14', 'Top', 'M', 't3.png', 0,'A knit cardigan featuring an open front, long sleeves, and a slight high-low hem.',1);
+INSERT INTO goods (id, user_id, name, price, tag, size, picture, rate_if, description,bought) VALUES (859,5,'Skirt', '52', 'Bottom', 'XL', 'b2.png', 0,'Brown Skirt',1);
