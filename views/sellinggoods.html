@@ -2,37 +2,32 @@
 
 {% block body %}
 <div class="container-s">
-	<div class="up">
+	<div class="ups">
 		<!-- <from id="read_item_info" method="get" action="/iteminfo"> -->
 			<!-- {% if data %} -->
 			<div class="up-in">
 				<div class="left-in">
-					<p id="itemname">Item Name: {{data.name}}</p>
-					<div class="pic-box"></div>
+					<div class="pic-box">
+						<img id="pic" src="img/item.jpg">
+					</div>
 				</div>
 				<div class="right-in">
-					<div class="mid-c">
-						<p>Price: {{data.price}}</p>
-						<p>Tags: {{data.tag}}</p>
-						<p>Size: {{data.size}}</p>
-						<p>Description: {{data.description}}</p>
-					</div>
-					<div class="mid-r"></div>
+					<p id="itemname">Item Name: {{data.name}}</p>
+					<p>Price: {{data.price}}</p>
+					<p>Tags: {{data.tag}}</p>
+					<p>Size: {{data.size}}</p>
+					<p>Description: {{data.description}}</p>
+					
 				</div>
 			</div>
 			<div class="down-in">
-				<!-- <form id="buy_this" method="post" action="/buy?id={{data.id}}"> -->
-					<button id="buythis" name={{data.id}} type="submit">Buy this</button>
-				<!-- </form> -->
-				<!-- <form id="chat_with" method="get" action="/chatpage?id={{data.user_id}}"> -->
-					<button name={{data.user_id}} type="submit">Chat with seller</button>
-				<!-- </form> -->
+				<button id="buythis" name={{data.id}} type="submit">Buy this</button>
+
+				<button id="chatwith" name={{data.user_id}} type="submit">Chat with seller</button>
 			</div>
-			<!-- {% endif %} -->
-<!-- 		</from> -->
 	</div>
 
-	<div class="down">
+	<div class="downs">
 		<p id={{data.user_id}}>Comments about This Seller:</p>
 		<from id="read_comments" method="get" action="/comments?id={{data.user_id}}">
 			<div class="comments-box">
