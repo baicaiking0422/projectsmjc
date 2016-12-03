@@ -34,8 +34,7 @@
 
   <body>
 
-    
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -52,15 +51,19 @@
           {% if not session.username %}
             <li><a href="/signup">Sign up</a></li>
           {% endif %}
-          </ul>
+          </ul> 
 
         {% if session.username %}
-        <p class="navbar-text navbar-right">Signed in as <strong>{{ session.username }}</strong> 
-        <a id="userInfo" class="btn btn-success" role="button">User Info</a>
-        <a id="signout" class="btn btn-success" role="button" href="/signout">Sign out</a>
+        <p class="navbar-text navbar-right">Signed in as <strong>{{ session.username }}</strong>
+        {% if session.is_admin %}
+        <a id="adminPage" class="btn btn-primary navbar-btn" role="button" href="#">Admin Page</a>
+        {% else %} 
+        <a id="userInfo" class="btn btn-primary navbar-btn" role="button" href="/userinfo?username={{session.username}}">User Info</a>
+        {% endif %}
+        <a id="signout" class="btn btn-primary navbar-btn" role="button" href="/signout">Sign out</a>
         </p>
         {% else %}
-            <button id="baseSignin" class="btn btn-success navbar-right" data-toggle="modal" data-target="#signinWindow">Sign in</button>
+            <button id="baseSignin" class="btn btn-primary navbar-right navbar-btn" data-toggle="modal" data-target="#signinWindow">Sign in</button>
 
 
         {% endif %}
@@ -81,7 +84,7 @@
 
       {% if session.is_admin %}
       <div class="row">
-        <div class="alert alert-success" role="alert">
+        <div class="alert alert-primary" role="alert">
           <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
           You are authenticated as the admin user {{ session.username }}.
         </div>
@@ -97,7 +100,7 @@
         <h4 class="modal-title" id="gridSystemModalLabel">Sign In</h4>
       </div>
       <div class="modal-body">
-         <form class="modal-form" method="post" action="/signin">
+         <form class="modal-form" method="post" id="basesigninSuc" action="/signin">
             <div class="form-group">
               <input name="username" type="text" placeholder="Username" class="form-control">
             </div>
@@ -105,7 +108,7 @@
               <input name="password" type="password" placeholder="Password" class="form-control">
             </div>
             <button type="button" class="btn btn-default" data-dismiss="modal">cancel</button>
-            <button type="submit" class="btn btn-success">Sign in</button>
+            <button type="submit" class="btn btn-primary">Sign in</button>
           </form>
       </div>
       <div class="modal-footer">

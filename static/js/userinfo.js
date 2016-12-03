@@ -9,19 +9,31 @@ $(document).ready(function() {
 					"<div class='col-sm-4'><input type='password' name='pw' class='form-control' id='pw' required></div>" +
 					"<label class='col-sm-2 control-label' for='pw_conf'>Confirmation</label>" +
 					"<div class='col-sm-4'><input type='password' name='pw_conf' class='form-control' id='pw_conf' required></div></br>" +
+<<<<<<< HEAD
 					"<button type='submit' class='btn btn-default col-sm-2'>EDIT</button></form></li>";
+=======
+					"<button type='submit' class='btn btn-default btn-sm'>EDIT</button></form></li>";
+>>>>>>> 7c6c3e5175dc43c6bf21aab424f186138f31a296
 		var b2 = "<li id='editEmail' class='list-group-item row'> Edit Email Address";
 		var form2 = "<form action='/editinfo?username=" + name + "' method='post' class='form-horizontal row'>" +
 					"<div class='form-group'>" +  
 					"<label class='col-sm-2 control-label' for='email'>New Email</label>" +
 					"<div class='col-sm-4'><input type='text' name='email' class='form-control' id='email' required></div>" +
+<<<<<<< HEAD
 					"<button type='submit' class='btn btn-default col-sm-2'>EDIT</button></form></li>";
+=======
+					"<button type='submit' class='btn btn-default btn-sm'>EDIT</button></form></li>";
+>>>>>>> 7c6c3e5175dc43c6bf21aab424f186138f31a296
 		var b3 = "<li id='editPhone' class='list-group-item row'> Edit Phone Number";
 		var form3 = "<form action='/editinfo?username=" + name + "' method='post' class='form-horizontal row'>" +
 					"<div class='form-group'>" +  
 					"<label class='col-sm-2 control-label' for='phone'>New Phone Number</label>" +
 					"<div class='col-sm-4'><input type='text' name='phone' class='form-control' id='phone' required></div>" +
+<<<<<<< HEAD
 					"<button type='submit' class='btn btn-default col-sm-2'>EDIT</button></form></li>";
+=======
+					"<button type='submit' class='btn btn-default btn-sm'>EDIT</button></form></li>";
+>>>>>>> 7c6c3e5175dc43c6bf21aab424f186138f31a296
 		var re = div + b1 + form1 + b2 + form2 + b3 + form3 + '</ul>'
 		$("#result").html(re);
 	});
@@ -172,13 +184,21 @@ $(document).ready(function() {
 	// });
 
 function loadMsg(msgs){
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7c6c3e5175dc43c6bf21aab424f186138f31a296
 	if (msgs.length > 0){
 	var re = "<div class='list-group'>";
 	for (let i = 0; i < msgs.length; i ++){
 		let div = "<div class='row'>";
 		let name = "<h4 class='list-group-item-heading col-md-4'>"+msgs[i].name+"</h4>";
 		let message = "<p class='list-group-item-text col-md-4'>"+msgs[i].message+"</p>";
+<<<<<<< HEAD
 		let button = "<button class='btn btn-default col-md-2'> Reply </button>";
+=======
+		let button = "<button class='btn btn-default btn-sm'><a href='/send?receiverName=" + msgs[i].name + "'> Reply </a></button>";
+>>>>>>> 7c6c3e5175dc43c6bf21aab424f186138f31a296
 		re = re + div + name + message + button + "</div>";
 	} 
 	return re;

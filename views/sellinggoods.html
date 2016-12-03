@@ -1,31 +1,47 @@
-<div class="container-s">
-	<div class="up">
-		<div class="up-in">
-			<div class="left-in">
-				<p>Item Name:</p>
-				<div class="pic-box"></div>
-			</div>
-			<div class="right-in">
-				<div class="mid-c">
-					<p>Price:</p>
-					<p>Tags:</p>
-					<p>Size:</p>
-					<p>Description:</p>
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container-s" id="selling" name={{session.username}}>
+	<div class="ups">
+		<!-- <from id="read_item_info" method="get" action="/iteminfo"> -->
+			<!-- {% if data %} -->
+			<div class="up-in">
+				<div class="left-in">
+					<div class="pic-box">
+						<img id="pic" src="img/{{data.picture}}" class="img-thumbnail">
+					</div>
 				</div>
-				<div class="mid-r"></div>
+				<div class="right-in">
+					<p id="itemname"><b>Item Name:</b> {{data.name}}</p>
+					<p><b>Price:</b> {{data.price}}</p>
+					<p><b>Tags:</b> {{data.tag}}</p>
+					<p><b>Size:</b> {{data.size}}</p>
+					<p><b>Description:</b> {{data.description}}</p>
+					
+				</div>
 			</div>
-		</div>
-		<div class="down-in">
-			<button id="buythis" type="submit">Buy this</button>
-			<button id="chatwith" type="submit">Chat with seller</button>
-		</div>
+			<div class="down-in">
+				<!-- <form id="buy_this" method="post" action="/buy?id={{data.id}}"> -->
+					<button class="btn btn-primary" id="buythis" name={{data.id}} type="submit">Buy this</button>
+				<!-- </form> -->
+				<!-- <form id="chat_with" method="post" action="/chatpage?id={{data.user_id}}"> -->
+					<button class="btn btn-default" id="sellingChat" name={{data.user_id}} type="submit">Chat with seller</button>
+				<!-- </form> -->
+			</div>
+			<!-- {% endif %} -->
+<!-- 		</from> -->
 	</div>
 
-	<div class="down">
-		<p>Comments about This Seller:</p>
-		<div class="comments-box">
-			<dl id="commentsforseller"></dl>
-		</div>
+	<div class="downs">
+		<h4 class="Titles Titles--alignLeft" id={{data.user_id}}>
+		Comments about This Seller:
+		</h4>
+		<from id="read_comments" method="get" action="/comments?id={{data.user_id}}">
+			<div class="comments-box">
+				<dl id="commentsforseller"></dl>
+			</div>
+		</from>
 	</div>
 </div>
 <script src="js/selling.js"></script>
+{% endblock %}

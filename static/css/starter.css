@@ -1,3 +1,111 @@
+/*Zhujun CSS*/
+
+/*.Titles--alignLeft:after {
+    margin-left: 1rem;
+}*/
+/*.Titles:after {
+    margin-left: 2rem;
+}*/
+.Titles:after, .Titles:before {
+    content: '';
+    display: block;
+    background: #000;
+    height: 1px;
+    -ms-flex: 1;
+    flex: 1;
+}
+*, :after, :before {
+    box-sizing: border-box;
+}
+
+
+.container-s{
+  margin:0 auto;
+  width:85%;
+  height: 90%;
+}
+.up-in{
+  height: 300px
+}
+.down-in{
+  height: 100px;
+}
+.ups{
+  height: absolute;
+}
+.downs{
+  height: absolute;
+}
+.left-in{
+  width: 39%;
+  float: left;
+  padding-right: 30px;
+}
+.right-in{
+  align-content: left;
+  width: 59%;
+  float: right;
+  border-width: 2px;
+}
+
+.right-in p{
+  text-align: left;
+  padding-left: 50px;
+}
+.pic-box #pic{
+  float: right;
+  border-style: ridge;
+  border-width: 2px;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+#hide {
+    display:none;
+}
+
+.rating input {
+    position:absolute;
+    filter:alpha(opacity=0);
+    -moz-opacity:0;
+    -khtml-opacity:0;
+    opacity:0;
+    cursor:pointer;
+    width:17px;
+}
+
+.rating span {
+    width:24px;
+    height:16px;
+    line-height:16px;
+    padding:1px 22px 1px 0; 
+    /* 1px FireFox fix */
+    background:url(http://www.d-k-j.com/Articles/Web_Development/Pure_CSS_5_Star_Rating_System_with_Radios/stars.png) no-repeat -22px 0;
+}
+*/
+
+/* Change span immediately following the checked radio */
+
+.rating input:checked + span {
+    background-position:-22px 0;
+}
+
+/* Reset all remaining stars back to default background.
+   This supersedes the above due to its ordering. */
+
+.rating input:checked + span ~ span {
+    background-position:0 0;
+}
+
+.jshover {
+    background-position:-22px 0 !important;
+}
+
+.jshoverNext {
+    background-position:0 0 !important;
+}
+/*Zhujun CSS*/
+
 body {
   padding-top: 50px;
 }
@@ -7,9 +115,9 @@ body {
   text-align: center;
 }
 
-.item img {
-  max-width: 100%;
-  max-height: 100%;
+img {
+  max-width: 300px;
+  max-height: 200px;
   padding: 10px;
 }
 

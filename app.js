@@ -61,12 +61,12 @@ app.get('/', function (req, res) {
 
 //=========Xueqi Fan===Start=========
 app.post('/signin', function(req, res) {
-  console.log(req.session);
+  //console.log(req.session);
   var reqUsername = req.body.username;
   var reqPassword = req.body.password;
   var item_id = req.query.item_id;
   var good_id = req.query.good_id;
-  console.log(good_id);
+  //console.log(good_id);
   db.all("SELECT id, username, password, is_admin FROM users WHERE username = '" + reqUsername + "'", function(err, rows) {
     if(err) {
       throw err;
@@ -147,27 +147,18 @@ app.post('/signup', function(req, res) {
   });
 });
 
-app.get('/items', function(req, res){
-   //console.log(req.body);
-   //åconsole.log(req.query);
-    var re = [];
-    // console.log(req.query.price);
-    // console.log(req.query.size);
-    var price = req.query.price;
-    var size = req.query.size;
-    var tag = req.query.tag;
-    var search = req.query.search;
-    var page = req.query.page;
-    var pageQuery = "";
-    if (page != null){
+function getSelectSQL(page, search, buyer_id, size, tag, price){
+  //console.log(page);
+   if (page != null || page != undefined){
       var pageNum = parseInt(page);
-      pageQuery = " LIMIT 9 OFFSET " + (pageNum - 1) * 9;
+      var pageQuery = " LIMIT 9 OFFSET " + (pageNum - 1) * 9;
+    } else{
+      var pageQuery = '';
     }
 
     var sql;
-    // select * from goods limit 3 offset 3
     var basicQuery = "SELECT name, id, picture FROM goods WHERE (name LIKE '%" 
-    + search + "%' or description LIKE '%" + search + "%') and bought == 1";
+    + search + "%' or description LIKE '%" + search + "%') and bought == 1 and user_id!=" + buyer_id;
     var sizeQuery = " and size == '" + size + "'";
     var priceQuery = " and price ";
     var tagQuery = " and tag== '" + tag + "'";
@@ -181,82 +172,137 @@ app.get('/items', function(req, res){
     sql = basicQuery + sizeQuery + pageQuery;
   }
   else if (size == "all" && tag == "All"){
-    if (price == "Under $100"){
-     sql = basicQuery + priceQuery + "<= 100"+ pageQuery;
-    } else if (price == "$101 - $200"){
-      sql = basicQuery + priceQuery + "> 100 and price <= 200"+ pageQuery;
-    } else if (price == "$201 - $300"){
-      sql = basicQuery + priceQuery + "> 200 and price <= 300"+ pageQuery;
-    } else if (price == "$301 - $400"){
-      sql = basicQuery + priceQuery + "> 300 and price <= 400"+ pageQuery;
-    } else if (price == "over $400"){
-     sql = basicQuery + priceQuery + "> 400"+ pageQuery;
+    if (price == "Under $10"){
+     sql = basicQuery + priceQuery + "<= 10"+ pageQuery;
+    } else if (price == "$11 - $20"){
+      sql = basicQuery + priceQuery + "> 10 and price <= 20"+ pageQuery;
+    } else if (price == "$21 - $30"){
+      sql = basicQuery + priceQuery + "> 20 and price <= 30"+ pageQuery;
+    } else if (price == "$31 - $40"){
+      sql = basicQuery + priceQuery + "> 30 and price <= 40"+ pageQuery;
+    } else if (price == "over $40"){
+     sql = basicQuery + priceQuery + "> 40"+ pageQuery;
     }
   } 
   else if (size == "all" && price == "all"){
      sql = basicQuery + tagQuery+ pageQuery;
   } else if (tag == "All"){
-    if (price == "Under $100"){
-        sql = basicQuery + sizeQuery +priceQuery + "<= 100"+ pageQuery;
-    } else if (price == "$101 - $200"){
-      sql = basicQuery + sizeQuery +priceQuery +"> 100 and price <= 200"+ pageQuery;
-    } else if (price == "$201 - $300"){
-      sql = basicQuery + sizeQuery +priceQuery +"> 200 and price <= 300"+ pageQuery;
-    } else if (price == "$301 - $400"){
-      sql = basicQuery + sizeQuery +priceQuery +"> 300 and price <= 400"+ pageQuery;
-    } else if (price == "over $400"){
-      sql = basicQuery + sizeQuery +priceQuery +"> 400"+ pageQuery;
+    if (price == "Under $10"){
+        sql = basicQuery + sizeQuery +priceQuery + "<= 10"+ pageQuery;
+    } else if (price == "$11 - $20"){
+      sql = basicQuery + sizeQuery +priceQuery +"> 10 and price <= 20"+ pageQuery;
+    } else if (price == "$21 - $30"){
+      sql = basicQuery + sizeQuery +priceQuery +"> 20 and price <= 30"+ pageQuery;
+    } else if (price == "$31 - $40"){
+      sql = basicQuery + sizeQuery +priceQuery +"> 30 and price <= 40"+ pageQuery;
+    } else if (price == "over $40"){
+      sql = basicQuery + sizeQuery +priceQuery +"> 40"+ pageQuery;
     }
   } else if (size == "all"){
-    if (price == "Under $100"){
-      sql = basicQuery + tagQuery +priceQuery + "<= 100"+ pageQuery;
-    } else if (price == "$101 - $200"){
-      sql = basicQuery + tagQuery +priceQuery +"> 100 and price <= 200"+ pageQuery;
-    } else if (price == "$201 - $300"){
-      sql = basicQuery + tagQuery +priceQuery +"> 200 and price <= 300"+ pageQuery;
-    } else if (price == "$301 - $400"){
-      sql = basicQuery + tagQuery +priceQuery +"> 300 and price <= 400"+ pageQuery;
-    } else if (price == "over $400"){
-      sql = basicQuery + tagQuery +priceQuery +"> 400"+ pageQuery;
+    if (price == "Under $10"){
+      sql = basicQuery + tagQuery +priceQuery + "<= 10"+ pageQuery;
+    } else if (price == "$11 - $20"){
+      sql = basicQuery + tagQuery +priceQuery +"> 10 and price <= 20"+ pageQuery;
+    } else if (price == "$21 - $30"){
+      sql = basicQuery + tagQuery +priceQuery +"> 20 and price <= 30"+ pageQuery;
+    } else if (price == "$31 - $40"){
+      sql = basicQuery + tagQuery +priceQuery +"> 30 and price <= 40"+ pageQuery;
+    } else if (price == "over $40"){
+      sql = basicQuery + tagQuery +priceQuery +"> 40"+ pageQuery;
     }
   } else if (price == "all"){
     sql = basicQuery + tagQuery +sizeQuery+ pageQuery;
   }
   else{
-    if (price == "Under $100"){
-      sql = basicQuery + tagQuery +sizeQuery+ "<= 100"+ pageQuery;
-    } else if (price == "$101 - $200"){
-      sql = basicQuery + tagQuery +sizeQuery+"> 100 and price <= 200"+ pageQuery;
-    } else if (price == "$201 - $300"){
-      sql = basicQuery + tagQuery +sizeQuery+"> 200 and price <= 300"+ pageQuery;
-    } else if (price == "$301 - $400"){
-     sql = basicQuery + tagQuery +sizeQuery+"> 300 and price <= 400"+ pageQuery;
-    } else if (price == "over $400"){
-     sql = basicQuery + tagQuery +sizeQuery+"> 400"+ pageQuery;
+    if (price == "Under $10"){
+      sql = basicQuery + tagQuery +sizeQuery+ "<= 10"+ pageQuery;
+    } else if (price == "$11 - $20"){
+      sql = basicQuery + tagQuery +sizeQuery+"> 10 and price <= 20"+ pageQuery;
+    } else if (price == "$21 - $30"){
+      sql = basicQuery + tagQuery +sizeQuery+"> 20 and price <= 30"+ pageQuery;
+    } else if (price == "$31 - $40"){
+     sql = basicQuery + tagQuery +sizeQuery+"> 30 and price <= 40"+ pageQuery;
+    } else if (price == "over $40"){
+     sql = basicQuery + tagQuery +sizeQuery+"> 40"+ pageQuery;
     }
   }
   //console.log(sql+"!!!!!");
-    db.all(sql, function(err, rows) {
-    if(err) {
-      throw err;
+  return sql;
+
+}
+
+app.get('/items', function(req, res){
+   //console.log(req.body);
+   //åconsole.log(req.query);
+    var re = [];
+    // console.log(req.query.price);
+    // console.log(req.query.size);
+    var price = req.query.price;
+    var size = req.query.size;
+    var tag = req.query.tag;
+    var search = req.query.search;
+    var page = req.query.page;
+    var buyer = req.query.buyer;
+    if (buyer == ''){
+      var buyer_id = -1;
+      var sql = getSelectSQL(page, search, buyer_id, size, tag, price);
+      //console.log(sql);
+      db.all(sql, function(err, rows) {
+      if(err) {
+        throw err;
+      }
+      if(!rows) {
+        throw "this shouldn't happen";
+      }
+      var len = rows.length;
+      for (var i = 0; i < len; i ++){
+        var obj = {"name":"","id":"", "picture":""};
+        obj["name"] = rows[i].name;
+        obj["id"] = rows[i].id;
+        obj["picture"] = rows[i].picture;
+        re[i] = obj;
+        //console.log("id " + rows[i].id + " picture " + rows[i].picture);
+      // console.log(re[i]);
+      }
+      //console.log(re);
+      res.send(JSON.stringify(re));
+    });
+
+    }else{
+        db.all("SELECT * FROM users WHERE username==?", [buyer], function (err, rows) {
+            if (err) {
+              throw err;
+            }
+            if(!rows) {
+               var  buyer_id = -1;
+            }else{
+              var buyer_id = rows[0].id;
+              var sql = getSelectSQL(page, search, buyer_id, size, tag, price);
+      db.all(sql, function(err, rows) {
+      if(err) {
+        throw err;
+      }
+      if(!rows) {
+        throw "this shouldn't happen";
+      }
+      var len = rows.length;
+      for (var i = 0; i < len; i ++){
+        var obj = {"name":"","id":"", "picture":""};
+        obj["name"] = rows[i].name;
+        obj["id"] = rows[i].id;
+        obj["picture"] = rows[i].picture;
+        re[i] = obj;
+        //console.log("id " + rows[i].id + " picture " + rows[i].picture);
+      // console.log(re[i]);
+      }
+      //console.log(re);
+      res.send(JSON.stringify(re));
+    });
+
+
+            }
+      });
     }
-    if(!rows) {
-      throw "this shouldn't happen";
-    }
-    let len = rows.length;
-    for (let i = 0; i < len; i ++){
-      let obj = {"name":"","id":"", "picture":""};
-      obj["name"] = rows[i].name;
-      obj["id"] = rows[i].id;
-      obj["picture"] = rows[i].picture;
-      re[i] = obj;
-      //console.log("id " + rows[i].id + " picture " + rows[i].picture);
-     // console.log(re[i]);
-    }
-     //console.log(re);
-    res.send(JSON.stringify(re));
-  });
-  //var result = {"items": re};
 });
 
 app.get("/addingGoods", function(req, res){
@@ -280,8 +326,10 @@ app.post("/addingGoods", function(req, res){
       req.session.username = username;
       res.render('addingGoods.html', {error:err});
     } else{
-      var url = '/userinfo?username=' + username;
-      res.redirect(url);
+      var wanteduser = {};
+      wanteduser["username"] = username;
+      req.session.username = username;
+      res.render('success.html', {data: wanteduser});
     }
   })
 });
@@ -297,7 +345,7 @@ function create_item(username, itemname, price, size, tag, description, callback
     db.run('INSERT INTO goods (user_id, name, price, size, tag, description, rate_if, bought) VALUES (?,?,?,?,?,?,?,?)', 
       [userid, itemname, price, size, tag, description, 0, 1], function(err){
         callback(err);
-      })
+      });
 
   });
 }
@@ -335,8 +383,10 @@ app.post("/wallet", function(req, res){
       if (err2){
         throw err2;
       } else{
-        var url = '/userinfo?username=' + user;
-        res.redirect(url);
+        var wanteduser = {};
+        wanteduser["username"] = user;
+        req.session.username = user;
+        res.render('success.html', {data: wanteduser});
       }
     })
   })
@@ -404,9 +454,10 @@ app.post('/editinfo', function(req, res){
       if (err){
         res.render('userinfo.html', {error:err});
       }else{
-        //res.send('Success');
-        var url = '/userinfo?username=' + reqUsername;
-        res.redirect(url);
+        var wanteduser = {};
+            wanteduser["username"] = reqUsername;
+            req.session.username = reqUsername;
+            res.render('success.html', {data: wanteduser});
       }
     })
   } else if (reqEmail != null){
@@ -414,8 +465,10 @@ app.post('/editinfo', function(req, res){
       if (err){
         res.render('userinfo.html', {error:err});
       }else{
-        var url = '/userinfo?username=' + reqUsername;
-        res.redirect(url);
+        var wanteduser = {};
+            wanteduser["username"] = reqUsername;
+            req.session.username = reqUsername;
+            res.render('success.html', {data: wanteduser});
       }
     });
   } else if (reqPhone != null){
@@ -423,12 +476,80 @@ app.post('/editinfo', function(req, res){
          if (err){
             res.render('userinfo.html', {error:err});
           }else{
-            var url = '/userinfo?username=' + reqUsername;
-            res.redirect(url);
+            var wanteduser = {};
+            wanteduser["username"] = reqUsername;
+            req.session.username = reqUsername;
+            res.render('success.html', {data: wanteduser});
           }
       });
     }
 })
+
+app.get('/sendmessage', function(req, res){
+  var sender = req.query.sender;
+  var item_id = req.query.item_id;
+  //console.log("sender id " + sender);
+  if (sender == ''){
+     res.send("Not Reg");
+  }else{
+  db.all("SELECT user_id FROM goods WHERE id = ? ", [item_id], function (err, rows) {
+    if (err) {
+      throw err;
+    }
+
+    var re = {};
+    re["receiver"] = rows[0].user_id;
+    res.send(JSON.stringify(re));
+    //res.jsonp(wanteduser);
+  });
+}
+})
+
+app.get('/send', function(req, res){
+  var receiver = req.query.receiver;
+  var reName = req.query.receiverName;
+  //console.log(reName);
+  if (reName == null || reName == undefined){
+  db.all("SELECT username FROM users WHERE id = ? ", [receiver], function (err, rows) {
+    if (err) {
+      throw err;
+    }
+    if (!rows){
+      throw "no valid message receiver";
+    }
+
+    var re = {};
+    re["receiver"] = rows[0].username;
+    res.render('message.html', {data: re});
+  });}
+  else{
+    var re = {};
+    //console.log("get username", reName);
+    re["receiver"] = reName;
+    res.render('message.html', {data: re});
+  }
+})
+
+app.post('/send', function(req, res){
+  var sender = req.body.sender;
+  var receiver = req.body.receiver;
+  var msg = req.body.message;
+  //console.log("in post send " + sender + receiver + msg);
+  db.all("SELECT u1.id as senderID, u2.id as receiverID FROM users u1, users u2 WHERE u1.username=? and u2.username=?", [sender, receiver], function(err,rows){
+    if (err){
+      throw err;
+    }
+    var sId = rows[0].senderID;
+    var rId = rows[0].receiverID;
+    db.run('INSERT INTO messages (sender, receiver, message) VALUES (?,?,?)', [sId,rId, msg], function(err2){
+       if (err2){
+          throw err2;
+        }
+        res.send('Success');
+      });
+  });
+})
+
 //=========Xueqi Fan===End====
 
 //=========Minhua Zhu===Start=========
@@ -570,22 +691,8 @@ app.post('/comments',function(req,res){
         } else {
           //res.sendStatus(200);
           res.redirect('/');
-          //return;
         }
     }); 
-  // }
-  //res.render('index.html');
-});
-
-//redirect to chat page
-app.get('/chatpage',function(req,res){
-  var seller_id = req.query.id;
-  if (req.session.username !== undefined) {
-    res.redirect('/');
-    return;
-  }
-
-  res.render('signin.html');
 });
 
 // update item info
@@ -597,31 +704,28 @@ app.post('/buy',function(req,res){
     db.all('SELECT currency FROM users WHERE id = ?', [req.session.user_id],function(err,current){
       
       var value = current[0].currency;
-      db.all('SELECT bought FROM goods WHERE id = ?', [item_id], function(err,row,current){
+      db.all('SELECT * FROM goods WHERE id = ?', [item_id], function(err,row,current){
       // already sold
-        var current = value;
+        //var current = value;
         console.log("YuE: "+value);
-        if (row.bought == 0) {
-          callback('Sold.');
-          return;
+        if (value == null || value < row[0].price) {
+          res.send("Not Enough");
         }
-        // not sold, update 1 to 0
         else {
-          db.run('UPDATE goods SET bought = 0 WHERE id = ?', [item_id], function(err){
+          // not sold, update 1 to 0
+          db.run('UPDATE goods SET buyer_id = ?, bought = 0 WHERE id = ?', [req.session.user_id], [item_id], function(err){
             if(err) {
               console.log(err);
               res.sendStatus(500);
-            } 
-            // redirect to main page or user_info page?
+            }
             else {
-              //res.sendStatus(200);
-              res.send("Reg and Bought");
-              //console.log("not tiaozhuan");
+              var re = {};
+              re["current"] = req.session.username;
+              res.send(JSON.stringify(re));
             }
           });
         }
       });
-
     });
     
   } 
@@ -632,7 +736,7 @@ app.post('/buy',function(req,res){
   }
 });
 
-app.get('/good', function(req, res,next) {
+app.get('/good', function(req, res) {
   var item_id = req.query.id;
   db.all("SELECT * FROM goods WHERE goods.id = ? ",[item_id],function(err,rows){
       if(err){
@@ -640,11 +744,7 @@ app.get('/good', function(req, res,next) {
       }
       console.log(rows[0]);
       var row = rows[0];
-      //res.json(rows);
       res.render('sellinggoods.html',{data: row});
-     // res.render('feedback.html',{data: row});
   });
 });
 //=========Zhujun Wang===End====
-
-//db.close();
