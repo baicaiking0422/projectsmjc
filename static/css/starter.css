@@ -1,5 +1,24 @@
 /*Zhujun CSS*/
 
+/*.Titles--alignLeft:after {
+    margin-left: 1rem;
+}*/
+/*.Titles:after {
+    margin-left: 2rem;
+}*/
+.Titles:after, .Titles:before {
+    content: '';
+    display: block;
+    background: #000;
+    height: 1px;
+    -ms-flex: 1;
+    flex: 1;
+}
+*, :after, :before {
+    box-sizing: border-box;
+}
+
+
 .container-s{
   margin:0 auto;
   width:85%;
@@ -37,7 +56,7 @@
   float: right;
   border-style: ridge;
   border-width: 2px;
-  height: 250px;
+  height: 280px;
   width: 250px;
 }
 
