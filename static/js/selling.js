@@ -18,25 +18,23 @@ $(document).ready(function() {
 				}
 				if (response == "Not Enough") {
 					alert("Not sufficient funds. Please Check your account balance.");
-					//window.location = '/userinfo'
 				}
-				if (response == "Reg and Bought") {
-					window.location = '/';
+				else {	
+					var res = JSON.parse(response);
+					window.location = '/userinfo?username=' + res.current;
 				}
 
 			}
 		});
 	});
 
-$('#sellingChat').click(function(){
+	$('#sellingChat').click(function(){
 		var item_id = $(this).attr("name");
 		var id = $('#selling').attr("name");
-		//console.log("item_id is " + item_id + " id is " + id);
 		$.ajax({
 			url: "/sendmessage?sender=" + id + "&item_id=" + item_id,
 			type: "GET",
 			success: function(response){
-				//console.log("send response " + response);
 				if (response == "Not Reg") {
 					console.log("not reg");
 					// TODO: 弹窗
@@ -45,7 +43,6 @@ $('#sellingChat').click(function(){
 					$('#baseSignin').click();
 				}else{
 					var res = JSON.parse(response);
-					//console.log('res is ' + response);
 					var receiver = res.receiver;
 					window.location = '/send?receiver='+ receiver;
 				}
