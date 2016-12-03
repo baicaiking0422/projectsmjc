@@ -65,3 +65,11 @@ INSERT INTO goods (id, user_id, name, price, tag, size, picture, rate_if, descri
 INSERT INTO goods (id, user_id, name, price, tag, size, picture, rate_if, description,bought) VALUES (879,6,'Knit Hoodie', '23', 'Top', 'S', 't2.png', 0,'An oversized knit hoodie featuring a fleece lining, drawstring hood, long sleeves, a kangaroo pocket, and ribbed trim.',1);
 INSERT INTO goods (id, user_id, name, price, tag, size, picture, rate_if, description,bought) VALUES (869,6,'Cardigan in grey', '14', 'Top', 'M', 't3.png', 0,'A knit cardigan featuring an open front, long sleeves, and a slight high-low hem.',1);
 INSERT INTO goods (id, user_id, name, price, tag, size, picture, rate_if, description,bought) VALUES (859,5,'Skirt', '52', 'Bottom', 'XL', 'b2.png', 0,'Brown Skirt',1);
+
+
+INSERT INTO messages (sender, receiver, message) VALUES (5, 6, 'hello');
+INSERT INTO messages (sender, receiver, message) VALUES (6, 5, 'hello, how is going?');
+INSERT INTO messages (sender, receiver, message) VALUES (5, 6, 'Good.');
+INSERT INTO messages (sender, receiver, message) VALUES (6, 5, 'I like your dress. Can you accept 5 lower?');
+INSERT INTO messages (sender, receiver, message) VALUES (5, 6, 'This is the lowest price I can bear.');
+INSERT INTO messages (sender, receiver, message) VALUES (6, 5, 'Ok.');
