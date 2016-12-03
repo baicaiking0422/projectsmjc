@@ -28,7 +28,7 @@ $(document).ready(function() {
 		});
 	});
 
-$('#sellingChat').click(function(){
+	$('#sellingChat').click(function(){
 		var item_id = $(this).attr("name");
 		var id = $('#selling').attr("name");
 		//console.log("item_id is " + item_id + " id is " + id);
