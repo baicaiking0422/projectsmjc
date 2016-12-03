@@ -1,8 +1,5 @@
 $(document).ready(function() {
 	refresh_comments();
-	var signInid = $("#buythis").attr("name");
-	//console.log(signInid);
-	$('#basesigninSuc').attr("action", "/signin?good_id="+signInid);
 
 	$("#buythis").click(function(){
 		var id = $(this).attr("name");
@@ -19,12 +16,12 @@ $(document).ready(function() {
 					
 					$('#baseSignin').click();
 				}
-				if (response == "Reg and Bought") {
-					console.log("reg and bought");
-					console.log(location.protocol);
-					console.log(location.pathname);
-					console.log(location.hostname);
-					window.location = '/';
+				if (response == "Not Enough") {
+					alert("Not sufficient funds. Please Check your account balance.");
+				}
+				else {	
+					var res = JSON.parse(response);
+					window.location = '/userinfo?username=' + res.current;
 				}
 
 			}
@@ -34,12 +31,10 @@ $(document).ready(function() {
 	$('#sellingChat').click(function(){
 		var item_id = $(this).attr("name");
 		var id = $('#selling').attr("name");
-		//console.log("item_id is " + item_id + " id is " + id);
 		$.ajax({
 			url: "/sendmessage?sender=" + id + "&item_id=" + item_id,
 			type: "GET",
 			success: function(response){
-				//console.log("send response " + response);
 				if (response == "Not Reg") {
 					console.log("not reg");
 					// TODO: 弹窗
@@ -48,11 +43,9 @@ $(document).ready(function() {
 					$('#baseSignin').click();
 				}else{
 					var res = JSON.parse(response);
-					//console.log('res is ' + response);
 					var receiver = res.receiver;
 					window.location = '/send?receiver='+ receiver;
 				}
-
 			}
 		});
 	});
