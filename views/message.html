@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <div class='row' id="msgPage" name="{{session.username}}"> Send Message To 
+      <p id="receiverName">{{data.receiver}}</p>
+    </div></br>
+    
+    <div class='row'>
+    <div>
+    <label class="col-xs-2 control-label">Message</label>
+    <textarea type="text" name="message" class="col-xs-6" id="message"></textarea></div>
+
+     <button id='send' name="{{data.receiver}}" class="btn btn-info btn-sm" disabled="disabled">Send</button>
+      </div>
+
+     <script src="js/message.js"></script>
+{% endblock %}
