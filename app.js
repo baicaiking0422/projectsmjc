@@ -45,7 +45,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({ secret: 'I am actually a potato', resave: false, saveUninitialized: false }));
 
 app.listen(port, function () {
-  console.log('Shopping app listening on port ' + port + '!');
+  console.log('Vintage app listening on port ' + port + '!');
 });
 
 // Expose session variables to views
