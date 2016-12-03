@@ -13,7 +13,7 @@ db.serialize();
 /**
  * Helper function for interacting with database.
  */
-function create_user(username, password, password_confirmation, email_address, phone, callback) {
+function create_user(username, password, password_confirmation, email_address, phone, money, callback) {
   if(password !== password_confirmation) {
     callback('Password does not match confirmation');
   } else {
@@ -28,7 +28,7 @@ function create_user(username, password, password_confirmation, email_address, p
       var pw_hash = bcrypt.hashSync(password, 10);
 
       // Notice the database stores all passwords hashed.
-      db.run('INSERT INTO users (username, password, email, phone) VALUES (?, ?, ?, ?)', [username, pw_hash, email_address, phone], function(err) {
+      db.run('INSERT INTO users (username, password, email, phone, currency) VALUES (?, ?, ?, ?,?)', [username, pw_hash, email_address, phone,money], function(err) {
         callback(err, username);
       });
     });
@@ -59,10 +59,14 @@ app.get('/', function (req, res) {
 });
 
 
+//=========Xueqi Fan===Start=========
 app.post('/signin', function(req, res) {
+  console.log(req.session);
   var reqUsername = req.body.username;
   var reqPassword = req.body.password;
-
+  var item_id = req.query.item_id;
+  var good_id = req.query.good_id;
+  console.log(good_id);
   db.all("SELECT id, username, password, is_admin FROM users WHERE username = '" + reqUsername + "'", function(err, rows) {
     if(err) {
       throw err;
@@ -77,7 +81,25 @@ app.post('/signin', function(req, res) {
       req.session.user_id = rows[0].id;
       req.session.username = rows[0].username;
       req.session.is_admin = rows[0].is_admin === 1;
-      res.redirect('/');
+      if (item_id != null){
+          db.all("SELECT * FROM goods WHERE goods.id = ? ",[item_id],function(err,r){
+          if(err){
+            throw err;
+          }
+          var ro = r[0];
+          res.render('sellinggoods.html',{data: ro});
+        });
+      }else if (good_id != null){
+         db.all("SELECT * FROM goods WHERE goods.id = ? ",[good_id],function(err,r){
+          if(err){
+            throw err;
+          }
+          var ro = r[0];
+          res.render('sellinggoods.html',{data: ro});
+        });
+      }else{
+        res.redirect('/');
+      }
     } else {
       res.render('index.html', { error: 'Invalid username or password' });
     }
@@ -111,8 +133,10 @@ app.post('/signup', function(req, res) {
   var password_confirmation = req.body.password_confirmation;
   var email_address = req.body.email_address;
   var phone = req.body.phone;
+  var money = req.body.currency;
+  //console.log(money);
 
-  create_user(username, password, password_confirmation, email_address, phone, function(err, username) {
+  create_user(username, password, password_confirmation, email_address, phone, money, function(err, username) {
     if (err) {
       res.render('signup.html', {error: err});
     } else {
@@ -132,69 +156,86 @@ app.get('/items', function(req, res){
     var price = req.query.price;
     var size = req.query.size;
     var tag = req.query.tag;
+    var search = req.query.search;
+    var page = req.query.page;
+    var pageQuery = "";
+    if (page != null){
+      var pageNum = parseInt(page);
+      pageQuery = " LIMIT 9 OFFSET " + (pageNum - 1) * 9;
+    }
 
     var sql;
+    // select * from goods limit 3 offset 3
+    var basicQuery = "SELECT name, id, picture FROM goods WHERE (name LIKE '%" 
+    + search + "%' or description LIKE '%" + search + "%') and bought == 1";
+    var sizeQuery = " and size == '" + size + "'";
+    var priceQuery = " and price ";
+    var tagQuery = " and tag== '" + tag + "'";
+    // console.log(price+size+tag);
+    // console.log("search" + search);
+   // + " and bought == 1"; in database not sale 
   if (price == "all" && size == "all" && tag == "All"){
-    sql = "SELECT name, id, picture FROM goods";
+    sql = basicQuery + pageQuery;
   }
   else if (price == "all" && tag == "All"){
-    sql = "SELECT name, id, picture FROM goods WHERE size == '" + size + "'";
+    sql = basicQuery + sizeQuery + pageQuery;
   }
   else if (size == "all" && tag == "All"){
     if (price == "Under $100"){
-      sql = "SELECT name, id, picture FROM goods WHERE price <= 100";
-    } else if (price == "$100 - $200"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 100 and price <= 200";
-    } else if (price == "$200 - $300"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 200 and price <= 300";
-    } else if (price == "$300 - $400"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 300 and price <= 400";
+     sql = basicQuery + priceQuery + "<= 100"+ pageQuery;
+    } else if (price == "$101 - $200"){
+      sql = basicQuery + priceQuery + "> 100 and price <= 200"+ pageQuery;
+    } else if (price == "$201 - $300"){
+      sql = basicQuery + priceQuery + "> 200 and price <= 300"+ pageQuery;
+    } else if (price == "$301 - $400"){
+      sql = basicQuery + priceQuery + "> 300 and price <= 400"+ pageQuery;
     } else if (price == "over $400"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 400";
+     sql = basicQuery + priceQuery + "> 400"+ pageQuery;
     }
   } 
   else if (size == "all" && price == "all"){
-     sql = "SELECT name, id, picture FROM goods WHERE tag == '" + tag + "'";
+     sql = basicQuery + tagQuery+ pageQuery;
   } else if (tag == "All"){
     if (price == "Under $100"){
-      sql = "SELECT name, id, picture FROM goods WHERE price <= 100 and size == '" + size + "'";
-    } else if (price == "$100 - $200"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 100 and price <= 200 and size == '" + size + "'";
-    } else if (price == "$200 - $300"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 200 and price <= 300 and size == '" + size + "'";
-    } else if (price == "$300 - $400"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 300 and price <= 400 and size == '" + size + "'";
+        sql = basicQuery + sizeQuery +priceQuery + "<= 100"+ pageQuery;
+    } else if (price == "$101 - $200"){
+      sql = basicQuery + sizeQuery +priceQuery +"> 100 and price <= 200"+ pageQuery;
+    } else if (price == "$201 - $300"){
+      sql = basicQuery + sizeQuery +priceQuery +"> 200 and price <= 300"+ pageQuery;
+    } else if (price == "$301 - $400"){
+      sql = basicQuery + sizeQuery +priceQuery +"> 300 and price <= 400"+ pageQuery;
     } else if (price == "over $400"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 400 and size == '" + size + "'";
+      sql = basicQuery + sizeQuery +priceQuery +"> 400"+ pageQuery;
     }
   } else if (size == "all"){
     if (price == "Under $100"){
-      sql = "SELECT name, id, picture FROM goods WHERE price <= 100 and tag = '" + tag + "'";
-    } else if (price == "$100 - $200"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 100 and price <= 200 and tag = '" + tag + "'";
-    } else if (price == "$200 - $300"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 200 and price <= 300 and tag = '" + tag + "'";
-    } else if (price == "$300 - $400"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 300 and price <= 400 and tag = '" + tag + "'";
+      sql = basicQuery + tagQuery +priceQuery + "<= 100"+ pageQuery;
+    } else if (price == "$101 - $200"){
+      sql = basicQuery + tagQuery +priceQuery +"> 100 and price <= 200"+ pageQuery;
+    } else if (price == "$201 - $300"){
+      sql = basicQuery + tagQuery +priceQuery +"> 200 and price <= 300"+ pageQuery;
+    } else if (price == "$301 - $400"){
+      sql = basicQuery + tagQuery +priceQuery +"> 300 and price <= 400"+ pageQuery;
     } else if (price == "over $400"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 400 and tag = '" + tag + "'";
+      sql = basicQuery + tagQuery +priceQuery +"> 400"+ pageQuery;
     }
   } else if (price == "all"){
-    sql = "SELECT id, picture FROM goods WHERE tag == '" + tag + "' and size = '" + size +"'";
+    sql = basicQuery + tagQuery +sizeQuery+ pageQuery;
   }
   else{
     if (price == "Under $100"){
-      sql = "SELECT name, id, picture FROM goods WHERE price <= 100 and size == '" + size + "' and tag = '" + tag + "'";
-    } else if (price == "$100 - $200"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 100 and price <= 200 and size == '" + size + "' and tag = '" + tag + "'";
-    } else if (price == "$200 - $300"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 200 and price <= 300 and size == '" + size + "' and tag = '" + tag + "'";
-    } else if (price == "$300 - $400"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 300 and price <= 400 and size == '" + size + "' and tag = '" + tag + "'";
+      sql = basicQuery + tagQuery +sizeQuery+ "<= 100"+ pageQuery;
+    } else if (price == "$101 - $200"){
+      sql = basicQuery + tagQuery +sizeQuery+"> 100 and price <= 200"+ pageQuery;
+    } else if (price == "$201 - $300"){
+      sql = basicQuery + tagQuery +sizeQuery+"> 200 and price <= 300"+ pageQuery;
+    } else if (price == "$301 - $400"){
+     sql = basicQuery + tagQuery +sizeQuery+"> 300 and price <= 400"+ pageQuery;
     } else if (price == "over $400"){
-      sql = "SELECT name, id, picture FROM goods WHERE price > 400 and size == '" + size + "' and tag = '" + tag + "'";
+     sql = basicQuery + tagQuery +sizeQuery+"> 400"+ pageQuery;
     }
   }
+  //console.log(sql+"!!!!!");
     db.all(sql, function(err, rows) {
     if(err) {
       throw err;
@@ -217,5 +258,415 @@ app.get('/items', function(req, res){
   });
   //var result = {"items": re};
 });
+
+app.get("/addingGoods", function(req, res){
+  req.session.username = req.query.username;
+  res.render("addingGoods.html");
+
+});
+
+app.post("/addingGoods", function(req, res){
+  //console.log(req.body);
+  var username = req.query.username;
+  var name = req.body.itemname;
+  var price = req.body.price;
+  var size = req.body.itemsize;
+  var tag = req.body.itemtag;
+  var description = req.body.description;
+  //console.log(money);
+
+  create_item(username, name, price, size, tag, description, function(err){
+    if (err){
+      req.session.username = username;
+      res.render('addingGoods.html', {error:err});
+    } else{
+      var url = '/userinfo?username=' + username;
+      res.redirect(url);
+    }
+  })
+});
+
+function create_item(username, itemname, price, size, tag, description, callback) {
+  db.all('SELECT id FROM users WHERE username = ?', [username] ,function(err, rows){
+    if (rows.length == 0 || rows.length > 1){
+      callback('could not happen');
+      return;
+    }
+    var userid = rows[0].id;
+
+    db.run('INSERT INTO goods (user_id, name, price, size, tag, description, rate_if, bought) VALUES (?,?,?,?,?,?,?,?)', 
+      [userid, itemname, price, size, tag, description, 0, 1], function(err){
+        callback(err);
+      })
+
+  });
+}
+
+app.get("/wallet", function(req, res){
+  var user = req.query.username;
+  db.all("SELECT currency FROM users WHERE username==?", [user], function (err, rows) {
+    if (err) {
+      throw err;
+    }
+  if(!rows) {
+      throw "this shouldn't happen";
+    }
+    let obj = {"currency" : rows[0].currency};
+    res.send(JSON.stringify(obj));
+  });
+});
+
+app.post("/wallet", function(req, res){
+  //console.log(req.query);
+  var user = req.query.username;
+  var charging = req.body.charging;
+  var amount = parseInt(charging);
+  db.all("SELECT currency FROM users WHERE username=?", [user], function(err, rows){
+    if (err) {
+      throw err;
+    } 
+    if(!rows) {
+      throw "this shouldn't happen";
+    } 
+    let temp = parseInt(rows[0].currency);
+    let newAmount = rows[0].currency + amount;
+    console.log("new amount is " + newAmount);
+    db.run("UPDATE users SET currency = ?", [newAmount], function(err2){
+      if (err2){
+        throw err2;
+      } else{
+        var url = '/userinfo?username=' + user;
+        res.redirect(url);
+      }
+    })
+  })
+});
+
+app.get("/message", function(req, res){
+  var receiver = req.query.username;
+  var re = [];
+  db.all("SELECT u1.username as senderName, message FROM users u1, users u2, messages" + 
+    " WHERE u1.id==messages.sender and u2.id==messages.receiver and u2.username==?", [receiver], function (err, rows) {
+    if (err) {
+      throw err;
+    }
+  if(!rows) {
+      throw "this shouldn't happen";
+    }
+    console.log(rows);
+    let len = rows.length;
+    for (let i = 0; i < len; i ++){
+      let obj = {"name":"","message":""};
+      obj["name"] = rows[i].senderName;
+      obj["message"] = rows[i].message;
+      re[i] = obj;
+      //console.log("id " + rows[i].id + " picture " + rows[i].picture);
+     // console.log(re[i]);
+    }
+     //console.log(re);
+    res.send(JSON.stringify(re));
+  });
+
+})
+
+function updatePassword(username, pwd, pwd_con, callback){
+  if (pwd != pwd_con){
+    callback('Password does not match confirmation');
+  }else{
+    var pw_hash = bcrypt.hashSync(pwd, 10);
+    db.run("UPDATE users SET password = ?", [pw_hash], function(err){
+        callback(err, username);
+    });
+  }
+}
+
+function updateEmail(username, email, callback){
+  db.run("UPDATE users SET email = ?", [email], function(err){
+        callback(err, username);
+    });
+}
+
+function updatePhone(username, phone, callback){
+  db.run("UPDATE users SET phone = ?", [phone], function(err){
+        callback(err, username);
+    });
+}
+
+app.post('/editinfo', function(req, res){
+  var reqUsername = req.query.username;
+  var reqPassword = req.body.pw;
+  var reqPwCon = req.body.pw_conf;
+  var reqEmail = req.body.email;
+  var reqPhone = req.body.phone;
+
+  if (reqPassword != null){
+    updatePassword(reqUsername, reqPassword, reqPwCon, function(err, username){
+      if (err){
+        res.render('userinfo.html', {error:err});
+      }else{
+        //res.send('Success');
+        var url = '/userinfo?username=' + reqUsername;
+        res.redirect(url);
+      }
+    })
+  } else if (reqEmail != null){
+    updateEmail(reqUsername, reqEmail, function(err, username){
+      if (err){
+        res.render('userinfo.html', {error:err});
+      }else{
+        var url = '/userinfo?username=' + reqUsername;
+        res.redirect(url);
+      }
+    });
+  } else if (reqPhone != null){
+      updatePhone(reqUsername, reqPhone, function(err, username){
+         if (err){
+            res.render('userinfo.html', {error:err});
+          }else{
+            var url = '/userinfo?username=' + reqUsername;
+            res.redirect(url);
+          }
+      });
+    }
+})
+//=========Xueqi Fan===End====
+
+//=========Minhua Zhu===Start=========
+// usr info
+app.get('/userinfo', function(req, res) {
+  var reqUsername = req.query.username;
+  console.log("here"+reqUsername);
+
+  db.all("SELECT id, username, password, email, phone FROM users WHERE username = ? ", [reqUsername], function (err, rows) {
+    if (err) {
+      throw err;
+    }
+
+    var wanteduser = {};
+    wanteduser["username"] = rows[0].username;
+    wanteduser["password"] = rows[0].password;
+    wanteduser["email"] = rows[0].email;
+    wanteduser["phone"] = rows[0].phone;
+    //console.log(wanteduser);
+    console.log({data: wanteduser});
+    res.render('userinfo.html', {data: wanteduser});
+    //res.jsonp(wanteduser);
+  });
+});
+
+app.get('/userinfo/sold', function(req, res) {
+  var reqUsername = req.session.username;
+  console.log("for sold");
+
+  db.all("SELECT * FROM goods WHERE user_id = '" + reqUsername + "'", function (err, rows) {
+    if (err) {
+      throw err;
+    }
+
+    var soldlist = {};
+    soldlist["goods"] = new Array();
+    for(var i=0; i<rows.length; i++) {
+        var single = new Object();
+        single.id = rows[i].id;
+        single.user = rows[i].user_id;
+        single.buyer = rows[i].buyer_id;
+
+    }
+  })
+})
+
+
+app.get('/sold', function(req, res) {
+  var reqUsername = req.query.username;
+  console.log("for sold");
+
+  db.all("SELECT name, price, size FROM goods,users WHERE user_id = users.id and username = ? ", [reqUsername], function (err, rows) {
+    if (err) {
+      throw err;
+    }
+
+    var soldlist = {};
+    soldlist["goods"] = new Array();
+    //soldlist.["goods"].push(reqUsername);
+    for(var i=0; i<rows.length; i++) {
+        var single = new Object();
+        single.name = rows[i].name;
+        single.price = rows[i].price;
+        single.size = rows[i].size;
+        soldlist["goods"].push(single);
+
+    }
+    console.log(soldlist);
+    res.json(soldlist);
+  });
+});
+
+app.get('/purchase', function(req, res) {
+  var reqUsername = req.query.username;
+  console.log("for purchase");
+  console.log(reqUsername);
+
+  db.all("SELECT name, price, size FROM goods,users WHERE buyer_id = users.id and username = ? ", [reqUsername], function (err, rows) {
+    if (err) {
+      throw err;
+    }
+
+    var purchaselist = {};
+    purchaselist["goods"] = new Array();
+    //soldlist.["goods"].push(reqUsername);
+    for(var i=0; i<rows.length; i++) {
+        var single = new Object();
+        single.name = rows[i].name;
+        single.price = rows[i].price;
+        single.size = rows[i].size;
+        purchaselist["goods"].push(single);
+
+    }
+    console.log(purchaselist);
+    res.json(purchaselist);
+  });
+});
+
+app.get('/rate', function(req, res) {
+  var reqUsername = req.query.username;
+  console.log("for rate");
+  console.log(reqUsername);
+
+  db.all("SELECT goods.id, name, price, size FROM goods,users WHERE buyer_id = users.id and rate_if = 0 and username = ? ", [reqUsername], function (err, rows) {
+    if (err) {
+      throw err;
+    }
+
+    var ratelist = {};
+    ratelist["goods"] = new Array();
+    //soldlist.["goods"].push(reqUsername);
+    for(var i=0; i<rows.length; i++) {
+        var single = new Object();
+        single.id = rows[i].id;
+        single.name = rows[i].name;
+        single.price = rows[i].price;
+        single.size = rows[i].size;
+        purchaselist["goods"].push(single);
+
+    }
+    console.log(ratelist);
+    res.json(ratelist);
+  });
+});
+
+
+//=========Minhua Zhu===End====
+
+//=========Zhujun Wang===Start=========
+//Get comments for particular seller
+app.get('/comments',function(req,res){
+  var user_id = req.query.id;
+  db.all("SELECT goods.name, users.username, goods.comments, CAST((julianday(datetime('now')) - julianday(goods.timestamp))*24 AS integer) AS days_ago " + 
+    "FROM users, goods WHERE users.id = goods.user_id AND users.id = ? AND goods.bought = 0 " + 
+    "ORDER BY goods.timestamp DESC LIMIT 10",[user_id], function(err,rows){
+      if(err){
+        throw err;
+      }
+      res.json(rows);
+  });
+});
+
+
+
+//Add comment for each item
+app.post('/comments',function(req,res){
+  var item_id = req.query.id;
+  console.log("post id:" + item_id);
+  var rating = req.body.rating;
+  console.log("rating: " + rating);
+  var comment = req.body.comment.substring(0,128);
+  console.log("comment: "+comment);
+  
+  var query = 'UPDATE  goods SET comments = ?, rate = ?, rate_if = 1 WHERE id = ?';
+  var placeholders = [comment, rating, item_id];
+
+  db.run(query, placeholders, function(err) {
+        if(err) {
+          console.log(err);
+          res.sendStatus(500);
+        } else {
+          //res.sendStatus(200);
+          res.redirect('/');
+          //return;
+        }
+    }); 
+  // }
+  //res.render('index.html');
+});
+
+//redirect to chat page
+app.get('/chatpage',function(req,res){
+  var seller_id = req.query.id;
+  if (req.session.username !== undefined) {
+    res.redirect('/');
+    return;
+  }
+
+  res.render('signin.html');
+});
+
+// update item info
+app.post('/buy',function(req,res){
+  //not login cannot buy
+  var item_id = req.query.item_id;
+  console.log(item_id);
+  if (req.session.user_id !== undefined) {
+    db.all('SELECT currency FROM users WHERE id = ?', [req.session.user_id],function(err,current){
+      
+      var value = current[0].currency;
+      db.all('SELECT bought FROM goods WHERE id = ?', [item_id], function(err,row,current){
+      // already sold
+        var current = value;
+        console.log("YuE: "+value);
+        if (row.bought == 0) {
+          callback('Sold.');
+          return;
+        }
+        // not sold, update 1 to 0
+        else {
+          db.run('UPDATE goods SET bought = 0 WHERE id = ?', [item_id], function(err){
+            if(err) {
+              console.log(err);
+              res.sendStatus(500);
+            } 
+            // redirect to main page or user_info page?
+            else {
+              //res.sendStatus(200);
+              res.send("Reg and Bought");
+              //console.log("not tiaozhuan");
+            }
+          });
+        }
+      });
+
+    });
+    
+  } 
+  // not login yet , please log in
+  else {
+    //res.redirect('/');
+    res.send("Not Reg");
+  }
+});
+
+app.get('/good', function(req, res,next) {
+  var item_id = req.query.id;
+  db.all("SELECT * FROM goods WHERE goods.id = ? ",[item_id],function(err,rows){
+      if(err){
+        throw err;
+      }
+      console.log(rows[0]);
+      var row = rows[0];
+      //res.json(rows);
+      res.render('sellinggoods.html',{data: row});
+     // res.render('feedback.html',{data: row});
+  });
+});
+//=========Zhujun Wang===End====
 
 //db.close();
