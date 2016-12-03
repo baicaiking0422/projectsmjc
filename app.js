@@ -645,7 +645,7 @@ app.get('/rate', function(req, res) {
         single.name = rows[i].name;
         single.price = rows[i].price;
         single.size = rows[i].size;
-        purchaselist["goods"].push(single);
+        ratelist["goods"].push(single);
 
     }
     console.log(ratelist);
@@ -698,6 +698,7 @@ app.post('/comments',function(req,res){
 // update item info
 app.post('/buy',function(req,res){
   //not login cannot buy
+  //console.log("buy!!" + req.session.user_id);
   var item_id = req.query.item_id;
   console.log(item_id);
   if (req.session.user_id !== undefined) {
@@ -713,7 +714,7 @@ app.post('/buy',function(req,res){
         }
         else {
           // not sold, update 1 to 0
-          db.run('UPDATE goods SET buyer_id = ?, bought = 0 WHERE id = ?', [req.session.user_id], [item_id], function(err){
+          db.run('UPDATE goods SET buyer_id = ?, bought = 0 WHERE id = ?', [req.session.user_id, item_id], function(err){
             if(err) {
               console.log(err);
               res.sendStatus(500);
@@ -735,7 +736,6 @@ app.post('/buy',function(req,res){
     res.send("Not Reg");
   }
 });
-
 app.get('/good', function(req, res) {
   var item_id = req.query.id;
   db.all("SELECT * FROM goods WHERE goods.id = ? ",[item_id],function(err,rows){
@@ -747,4 +747,18 @@ app.get('/good', function(req, res) {
       res.render('sellinggoods.html',{data: row});
   });
 });
+
+app.get('/feedback', function(req, res) {
+  var item_id = req.query.item_id;
+  console.log("in get feedback" + item_id);
+  db.all("SELECT * FROM goods WHERE goods.id = ? ",[item_id],function(err,rows){
+      if(err){
+        throw err;
+      }
+      console.log(rows[0]);
+      var row = rows[0];
+      res.render('feedback.html',{data: row});
+  });
+});
 //=========Zhujun Wang===End====
+
