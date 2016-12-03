@@ -1,33 +1,38 @@
 {% extends "base.html" %}
 
 {% block body %}
-<div class="container-s">
-	<div class="ups">
+<div class="container-s" id="selling" name={{session.username}}>
+	<div class="up">
 		<!-- <from id="read_item_info" method="get" action="/iteminfo"> -->
 			<!-- {% if data %} -->
 			<div class="up-in">
 				<div class="left-in">
-					<div class="pic-box">
-						<img id="pic" src="img/item.jpg">
-					</div>
+					<p id="itemname">Item Name: {{data.name}}</p>
+					<div class="pic-box"></div>
 				</div>
 				<div class="right-in">
-					<p id="itemname">Item Name: {{data.name}}</p>
-					<p>Price: {{data.price}}</p>
-					<p>Tags: {{data.tag}}</p>
-					<p>Size: {{data.size}}</p>
-					<p>Description: {{data.description}}</p>
-					
+					<div class="mid-c">
+						<p>Price: {{data.price}}</p>
+						<p>Tags: {{data.tag}}</p>
+						<p>Size: {{data.size}}</p>
+						<p>Description: {{data.description}}</p>
+					</div>
+					<div class="mid-r"></div>
 				</div>
 			</div>
 			<div class="down-in">
-				<button id="buythis" name={{data.id}} type="submit">Buy this</button>
-
-				<button id="chatwith" name={{data.user_id}} type="submit">Chat with seller</button>
+				<!-- <form id="buy_this" method="post" action="/buy?id={{data.id}}"> -->
+					<button id="buythis" name={{data.id}} type="submit">Buy this</button>
+				<!-- </form> -->
+				<!-- <form id="chat_with" method="get" action="/chatpage?id={{data.user_id}}"> -->
+					<button id="sellingChat" name={{data.id}} type="submit">Chat with seller</button>
+				<!-- </form> -->
 			</div>
+			<!-- {% endif %} -->
+<!-- 		</from> -->
 	</div>
 
-	<div class="downs">
+	<div class="down">
 		<p id={{data.user_id}}>Comments about This Seller:</p>
 		<from id="read_comments" method="get" action="/comments?id={{data.user_id}}">
 			<div class="comments-box">
