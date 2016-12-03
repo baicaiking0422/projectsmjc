@@ -246,73 +246,59 @@ app.post('/comments',function(req,res){
   var query = 'UPDATE  goods SET comments = ?, rate = ?, rate_if = 1 WHERE id = ?';
   var placeholders = [comment, rating, item_id];
 
-  // if (rating == null || comment==null){
-  //   res.render('feedback.html');
-  //   //return;
-  // }
-  // else{
-    db.run(query, placeholders, function(err) {
+  db.run(query, placeholders, function(err) {
         if(err) {
           console.log(err);
-          //res.sendStatus(500);
+          res.sendStatus(500);
         } else {
           //res.sendStatus(200);
-          //console.log("??????");
           res.redirect('/');
-          console.log("??????");
-          //return;
         }
     }); 
-  // }
-  //res.render('index.html');
-});
-
-//redirect to chat page
-app.get('/chatpage',function(req,res){
-  var seller_id = req.query.id;
-  if (req.session.username !== undefined) {
-    res.redirect('/');
-    return;
-  }
-
-  res.render('signin.html');
 });
 
 // update item info
 app.post('/buy',function(req,res){
   //not login cannot buy
-  var item_id = req.query.id;
+  var item_id = req.query.item_id;
   console.log(item_id);
   if (req.session.user_id !== undefined) {
-    db.all('SELECT bought FROM goods WHERE id = ?', [item_id], function(err,row){
+    db.all('SELECT currency FROM users WHERE id = ?', [req.session.user_id],function(err,current){
+      
+      var value = current[0].currency;
+      db.all('SELECT * FROM goods WHERE id = ?', [item_id], function(err,row,current){
       // already sold
-      if (row.bought == 0) {
-        callback('Sold.');
-        return;
-      }
-      // not sold, update 1 to 0
-      else {
-        db.run('UPDATE goods SET bought = 0 WHERE id = ?', [item_id], function(err){
-          if(err) {
-            console.log(err);
-            res.sendStatus(500);
-          } else {
-            res.sendStatus(200);
-          }
-        });
-        // redirect to main page or user_info page?
-        res.redirect('/');
-      }
+        //var current = value;
+        console.log("YuE: "+value);
+        if (value == null || value < row[0].price) {
+          res.send("Not Enough");
+        }
+        else {
+          // not sold, update 1 to 0
+          db.run('UPDATE goods SET bought = 0 WHERE id = ?', [item_id], function(err){
+            if(err) {
+              console.log(err);
+              res.sendStatus(500);
+            }
+            else {
+              var re = {};
+              re["current"] = req.session.username;
+              res.send(JSON.stringify(re));
+            }
+          });
+        }
+      });
     });
     
   } 
   // not login yet , please log in
   else {
-    res.redirect('/');
+    //res.redirect('/');
+    res.send("Not Reg");
   }
 });
 
-app.get('/good', function(req, res,next) {
+app.get('/good', function(req, res) {
   var item_id = req.query.id;
   db.all("SELECT * FROM goods WHERE goods.id = ? ",[item_id],function(err,rows){
       if(err){
@@ -320,10 +306,7 @@ app.get('/good', function(req, res,next) {
       }
       console.log(rows[0]);
       var row = rows[0];
-      //res.json(rows);
-      //res.render('goods.html', {data:row});
-     // res.render('sellinggoods.html',{data: row});
-      res.render('feedback.html',{data: row});
+      res.render('sellinggoods.html',{data: row});
   });
 });
 //=========Zhujun Wang===End====
