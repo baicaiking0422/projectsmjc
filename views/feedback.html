@@ -1,21 +1,27 @@
 {% extends "base.html" %}
 
 {% block body %}
-<div class="container">
+<div class="container-s">
 	<div class="up">
-		<div class="left">
-			<p class="row-l">Item Name: {{data.name}}</p>
+		<div class="row">
+			<div class="col-md-6">
+				<img id="pic" src="img/{{data.picture}}" class="img-thumbnail">
+			</div>
+			<div class="col-md-6">
+				<p class="row-l">Item Name: {{data.name}}</p>
+			</div>
 		</div>
 
 	</div>
 
 	<div class="down">
 			<div class="left">
-				<p class="row-l">Rate:</p>
-				<p class="row-l">Comment:</p>
+				<!-- <p class="row-l">Rate:</p>
+				<p class="row-l">Comment:</p> -->
 			</div>
 			<div class="right">
 				<form id="make_comment" method="post" action="/comments?id={{data.id}}">
+					<p class="row-l"><b>Rate:</b></p>
 					<div class="rating">
 						<input type="radio" name="rating" value="0" checked /><span id="hide"></span>
 						<input type="radio" name="rating" value="1" /><span></span>
@@ -24,9 +30,9 @@
 						<input type="radio" name="rating" value="4" /><span></span>
 						<input type="radio" name="rating" value="5" /><span></span>
 					</div>
-
+					<p class="row-l"><b>Comment:</b></p>
 					<textarea name="comment" id="area" placeholder="Share a comment about this item or seller ..." class="form-control" rows="4"></textarea>
-			
+					<br>
 					<button type="submit" id="addcomment" class="btn btn-default">Submit Comment</button>
 				</form>
 			</div>
