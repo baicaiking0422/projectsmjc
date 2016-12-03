@@ -735,7 +735,7 @@ app.post('/buy',function(req,res){
         }
         else {
           // not sold, update 1 to 0
-          db.run('UPDATE goods SET bought = 0 WHERE id = ?', [item_id], function(err){
+          db.run('UPDATE goods SET buyer_id = ?, bought = 0 WHERE id = ?', [req.session.user_id], [item_id], function(err){
             if(err) {
               console.log(err);
               res.sendStatus(500);
