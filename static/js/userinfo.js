@@ -36,11 +36,7 @@ $(document).ready(function() {
 			dataType: "json",
 			success: function(response){
 				console.log(response);
-				tableR = ""
-                // tableR += "<div class=\"panel panel-default\">"
-                // tableR += "  <div class=\"panel-heading\">" + returnData.code + "</div>"
-                // tableR += "  <div class=\"panel-body\">"
-
+				tableR = "";
                 tableR += "<table  class=\"table table-bordered  table-hover\">";
                 tableR += "<tr class='warning'><td  align='center'>name</td><td align='center'>price</td><td align='center'>size</td>"
                        + "</tr>";
@@ -68,11 +64,7 @@ $(document).ready(function() {
 			success: function(response){
 				$("#result").html("");
 				//console.log(response);
-				tableR = ""
-                // tableR += "<div class=\"panel panel-default\">"
-                // tableR += "  <div class=\"panel-heading\">" + returnData.code + "</div>"
-                // tableR += "  <div class=\"panel-body\">"
-
+				tableR = "";
                 tableR += "<table  class=\"table table-bordered  table-hover\">";
                 tableR += "<tr class='warning'><td  align='center'>name</td><td align='center'>price</td><td align='center'>size</td>"
                        + "</tr>";
@@ -101,10 +93,6 @@ $(document).ready(function() {
 				$("#result").html("");
 				console.log(response);
 				tableR = ""
-                // tableR += "<div class=\"panel panel-default\">"
-                // tableR += "  <div class=\"panel-heading\">" + returnData.code + "</div>"
-                // tableR += "  <div class=\"panel-body\">"
-
                 tableR += "<table  class=\"table table-bordered  table-hover\">";
                 tableR += "<tr class='warning'><td  align='center'>name</td><td align='center'>price</td><td align='center'>size</td><td align='center'>rate now</td>"
                        + "</tr>";
@@ -168,13 +156,6 @@ function loadMsg(msgs){
 		        + msgs[i].message + "</td><td align='center'>";
 		let button = "<button class='btn btn-default btn-sm'><a href='/send?receiverName=" + msgs[i].name + "'> Reply</a></button>";
 		tableR = tableR + button + "</td>" + "</tr>";
-		// re = re + div + name + message + button + "</div>";
-
-		// let div = "<div class='row'>";
-		// let name = "<h4 class='list-group-item-heading col-md-4'>"+msgs[i].name+"</h4>";
-		// let message = "<p class='list-group-item-text col-md-4'>"+msgs[i].message+"</p>";
-		// let button = "<button class='btn btn-default btn-sm'><a href='/send?receiverName=" + msgs[i].name + "'> Reply </a></button>";
-		// re = re + div + name + message + button + "</div>";
 	} 
 	tableR = tableR + "</table>";
 	return tableR;
