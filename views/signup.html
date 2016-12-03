@@ -4,17 +4,17 @@
   <div class="row">
     <form action="/signup" method="post" class="form-horizontal">
       <div class="form-group">
-        <label class="col-sm-2 control-label" for="username">Username</label>
+        <label class="col-sm-2 control-label" for="username">Username *</label>
         <div class="col-sm-6"><input type="text" name="username" class="form-control" id="username" required></div>
       </div>
 
       <div class="form-group">
-        <label class="col-sm-2 control-label" for="password">Password</label>
+        <label class="col-sm-2 control-label" for="password">Password *</label>
         <div class="col-sm-6"><input type="password" name="password" class="form-control" id="password" required></div>
       </div>
 
       <div class="form-group">
-        <label class="col-sm-2 control-label" for="password_confirmation">Password (confirmation)</label>
+        <label class="col-sm-2 control-label" for="password_confirmation">Password (confirmation) *</label>
         <div class="col-sm-6"><input type="password" name="password_confirmation" class="form-control" id="password_confirmation" required></div>
       </div>
 
@@ -29,8 +29,8 @@
       </div>
 
       <div class="form-group">
-        <label class="col-sm-6 control-label" for="currency">Please enter amount that you would like to charge into your account</label>
-        <div class="col-sm-2"><input type="text" name="currency" class="form-control" id="currency" pattern="^\d+$"></div>
+        <label class="col-sm-6 control-label" for="currency">Please enter amount that you would like to charge into your account *</label>
+        <div class="col-sm-2"><input type="text" name="currency" class="form-control" id="currency" pattern="^\d+$" required></div>
       </div>
 
       <button type="submit" class="btn btn-default">Sign up</button>
