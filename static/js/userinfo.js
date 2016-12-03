@@ -160,9 +160,9 @@ function loadMsg(msgs){
 
 	if (msgs.length > 0){
 	tableR = "";
-	// tableR += "<table  class=\"table table-bordered  table-hover\">";
- //    tableR += "<tr class='warning'><td  align='center'>name</td><td align='center'>message</td><td align='center'>Reply</td>"
- //                       + "</tr>";
+	tableR += "<table  class=\"table table-bordered  table-hover\">";
+    tableR += "<tr class='warning'><td  align='center'>name</td><td align='center'>message</td><td align='center'>Reply</td>"
+                       + "</tr>";
 	for (let i = 0; i < msgs.length; i ++){
 		tableR = tableR + "<tr>" + "<td align='center'>" + msgs[i].name + "</td><td align='center'>"
 		        + msgs[i].message + "</td><td align='center'>";
