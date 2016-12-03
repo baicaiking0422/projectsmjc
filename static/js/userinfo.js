@@ -113,7 +113,7 @@ $(document).ready(function() {
                             + "<td align='center'>" + response["goods"][i].name
                             + "</td><td align='center'>" + response["goods"][i].price
                             + "</td><td align='center'>" + response["goods"][i].size
-                            + "</td>" + "<td align='center'><button>Rate</button></td></tr>";
+                            + "</td>" + "<td align='center' class='rate'><a href='/feedback?item_id="+response["goods"][i].id + "'><input type='button' value='rate'></a></td>";
                 }
                 tableR = tableR + "</table>";
                 $("#result").html(tableR);
@@ -121,6 +121,7 @@ $(document).ready(function() {
 			}
 		});
 	});
+
 
 
 	$("#wallet").click(function(){
@@ -155,30 +156,10 @@ $(document).ready(function() {
 		});
 	});
 
-	// $("#back").click(function(){
-	// 	var id = $(this).attr("name");
-	// 	console.log(id);
-	// 	$.ajax({
-	// 		url: "/buy?item_id=" + id,
-	// 		type: "POST",
-	// 		success: function(response){
-	// 			console.log(response);
-	// 			if (response == "Not Reg") {
-	// 				console.log("not reg");
-	// 				// TODO: 弹窗
-	// 			}
-	// 		}
-	// 	});
-	// });
-
 function loadMsg(msgs){
 
 	if (msgs.length > 0){
-		tableR = ""
-		tableR += "<table  class=\"table table-bordered  table-hover\">";
-        tableR += "<tr class='warning'><td  align='center'>name</td><td align='center'>message</td><td align='center'>Reply</td>"
-                       + "</tr>";
-	// var re = "<div class='list-group'>";
+	tableR = "";
 	for (let i = 0; i < msgs.length; i ++){
 		tableR = tableR + "<tr>" + "<td align='center'>" + msgs[i].name + "</td><td align='center'>"
 		        + msgs[i].message + "</td><td align='center'>";
@@ -186,7 +167,13 @@ function loadMsg(msgs){
 		// let name = "<h4 class='list-group-item-heading col-md-4'>"+msgs[i].name+"</h4>";
 		// let message = "<p class='list-group-item-text col-md-4'>"+msgs[i].message+"</p>";
 		let button = "<button class='btn btn-default btn-sm'><a href='/send?receiverName=" + msgs[i].name + "'> Reply</a></button>";
-		tableR = tableR + button + "</td>" + "<td align='center'><input type='button' value='rate'></td>";
+		tableR = tableR + button + "</td>" + "</tr>";
+		// re = re + div + name + message + button + "</div>";
+
+		// let div = "<div class='row'>";
+		// let name = "<h4 class='list-group-item-heading col-md-4'>"+msgs[i].name+"</h4>";
+		// let message = "<p class='list-group-item-text col-md-4'>"+msgs[i].message+"</p>";
+		// let button = "<button class='btn btn-default btn-sm'><a href='/send?receiverName=" + msgs[i].name + "'> Reply </a></button>";
 		// re = re + div + name + message + button + "</div>";
 	} 
 	tableR = tableR + "</table>";
@@ -196,38 +183,3 @@ function loadMsg(msgs){
 		return "<div class='alert alert-info col-md-4' role='alert'> No messages </div>";
 	}
 }
-
-
-// function loadinfo() {
-//         var url = "/userinfo";
-//         $.ajax({
-//           url: url,
-//           type: "get",
-//           dataType: "json",
-//           success: function() {
-//             re = "";
-//             div1 = "<div id='username'>" + data.username + "</div>";
-//             edit1 = "<button type='button' class='btn btn-default' onclick='#;'>Edit</button>";
-//             div2 = "<div id='password'>" + data.password + "</div>";
-//             edit2 = "<button type='button' class='btn btn-default' onclick='#;'>Edit</button>";
-//             div3 = "<div id='email'>" + returnData.email + "</div>";
-//             edit3 = "<button type='button' class='btn btn-default' onclick='#;'>Edit</button>";
-//             div4 = "<div id='phone'>" + returnData.phone + "</div>";
-//             edit4 = "<button type='button' class='btn btn-default' onclick='#;'>Edit</button>";
-//             button = "<button type='button' class='btn btn-default' onclick='#;'>Submit</button>";
-//             re = div1 + edit1 + div2 + edit2 + div3 + edit3 + div4 + edit4 + button;
-//             $("#result").html(re);
-//           }
-//         })
-//       }
-
-//       function editinfo(type) {
-//         if (type == 1) {
-//           newinput = "<input>"
-//         }
-
-//       }
-
-//       function loadsold() {
-        
-//       }
