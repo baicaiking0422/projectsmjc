@@ -575,28 +575,6 @@ app.get('/userinfo', function(req, res) {
   });
 });
 
-app.get('/userinfo/sold', function(req, res) {
-  var reqUsername = req.session.username;
-  console.log("for sold");
-
-  db.all("SELECT * FROM goods WHERE user_id = '" + reqUsername + "'", function (err, rows) {
-    if (err) {
-      throw err;
-    }
-
-    var soldlist = {};
-    soldlist["goods"] = new Array();
-    for(var i=0; i<rows.length; i++) {
-        var single = new Object();
-        single.id = rows[i].id;
-        single.user = rows[i].user_id;
-        single.buyer = rows[i].buyer_id;
-
-    }
-  })
-})
-
-
 app.get('/sold', function(req, res) {
   var reqUsername = req.query.username;
   console.log("for sold");
@@ -770,4 +748,3 @@ app.get('/good', function(req, res) {
   });
 });
 //=========Zhujun Wang===End====
-
