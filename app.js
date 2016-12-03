@@ -701,10 +701,11 @@ app.post('/buy',function(req,res){
   //console.log("buy!!" + req.session.user_id);
   var item_id = req.query.item_id;
   console.log(item_id);
-  if (req.session.user_id !== undefined) {
-    db.all('SELECT currency FROM users WHERE id = ?', [req.session.user_id],function(err,current){
+  if (req.session.username !== undefined) {
+    db.all('SELECT id, currency FROM users WHERE username = ?', [req.session.username],function(err,current){
       
       var value = current[0].currency;
+      var user_id = current[0].id;
       db.all('SELECT * FROM goods WHERE id = ?', [item_id], function(err,row,current){
       // already sold
         //var current = value;
@@ -714,7 +715,7 @@ app.post('/buy',function(req,res){
         }
         else {
           // not sold, update 1 to 0
-          db.run('UPDATE goods SET buyer_id = ?, bought = 0 WHERE id = ?', [req.session.user_id, item_id], function(err){
+          db.run('UPDATE goods SET buyer_id = ?, bought = 0 WHERE id = ?', [user_id, item_id], function(err){
             if(err) {
               console.log(err);
               res.sendStatus(500);
@@ -733,6 +734,7 @@ app.post('/buy',function(req,res){
   // not login yet , please log in
   else {
     //res.redirect('/');
+    console.log("Not Reg");
     res.send("Not Reg");
   }
 });
