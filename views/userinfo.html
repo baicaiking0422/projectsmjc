@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-pills nav-stacked">
-            <li class="active" role="presentation" id="editinfo" name={{session.username}}><a href="#">Edit Pesonal Info</a></li>
+            <li role="presentation" id="editinfo" name={{session.username}}><a href="#">Edit Pesonal Info</a></li>
             <li role="presentation" id="soldhistory" name="{{session.username}}"><a href="#">Sold History</a></li>
             <li role="presentation" id="purchasehistory" name="{{session.username}}"><a href="#">Purchase History</a></li>
             <li role="presentation" id="rate" name="{{session.username}}"><a href="#">Want to Rate</a></li>
@@ -17,21 +17,21 @@
     <div class="col-md-7">
         <div id="result">
           <div id="userinfo">
-            <div class="panel panel-primary">
+            <div class="panel panel-default">
               <div class="panel-heading">
                 <h3 class="panel-title">Username</h3>
               </div>
               <div class="panel-body">{{data.username}}</div>
             </div>
 
-            <div class="panel panel-primary">
+            <div class="panel panel-default">
               <div class="panel-heading">
                 <h3 class="panel-title">Email</h3>
               </div>
               <div class="panel-body">{{data.email}}</div>
             </div>
 
-            <div class="panel panel-primary">
+            <div class="panel panel-default">
               <div class="panel-heading">
                 <h3 class="panel-title">Phone</h3>
               </div>
