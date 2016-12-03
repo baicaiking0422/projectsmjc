@@ -645,7 +645,7 @@ app.get('/rate', function(req, res) {
         single.name = rows[i].name;
         single.price = rows[i].price;
         single.size = rows[i].size;
-        purchaselist["goods"].push(single);
+        ratelist["goods"].push(single);
 
     }
     console.log(ratelist);

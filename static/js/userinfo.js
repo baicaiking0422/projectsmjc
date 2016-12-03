@@ -49,7 +49,7 @@ $(document).ready(function() {
                             + "<td align='center'>" + response["goods"][i].name
                             + "</td><td align='center'>" + response["goods"][i].price
                             + "</td><td align='center'>" + response["goods"][i].size
-                            + "</td>";
+                            + "</td></tr>";
                 }
                 tableR = tableR + "</table>";
                 $("#result").html(tableR);
@@ -81,7 +81,7 @@ $(document).ready(function() {
                             + "<td align='center'>" + response["goods"][i].name
                             + "</td><td align='center'>" + response["goods"][i].price
                             + "</td><td align='center'>" + response["goods"][i].size
-                            + "</td>";
+                            + "</td></tr>";
                 }
                 tableR = tableR + "</table>";
                 $("#result").html(tableR);
@@ -113,7 +113,7 @@ $(document).ready(function() {
                             + "<td align='center'>" + response["goods"][i].name
                             + "</td><td align='center'>" + response["goods"][i].price
                             + "</td><td align='center'>" + response["goods"][i].size
-                            + "</td>" + "<td align='center'><input type='button' value='rate'></td>";
+                            + "</td>" + "<td align='center'><button>Rate</button></td></tr>";
                 }
                 tableR = tableR + "</table>";
                 $("#result").html(tableR);
@@ -185,7 +185,7 @@ function loadMsg(msgs){
 		// let div = "<div class='row'>";
 		// let name = "<h4 class='list-group-item-heading col-md-4'>"+msgs[i].name+"</h4>";
 		// let message = "<p class='list-group-item-text col-md-4'>"+msgs[i].message+"</p>";
-		let button = "<button class='btn btn-default btn-sm'><a href='/send?receiverName=" + msgs[i].name + "'> Reply </a></button>";
+		let button = "<button class='btn btn-default btn-sm'><a href='/send?receiverName=" + msgs[i].name + "'> Reply</a></button>";
 		tableR = tableR + button + "</td>" + "<td align='center'><input type='button' value='rate'></td>";
 		// re = re + div + name + message + button + "</div>";
 	} 
