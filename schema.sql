@@ -46,7 +46,7 @@ INSERT INTO users (username, password, is_admin) VALUES ('minhua', '$2a$10$Y5Gmd
 INSERT INTO users (username, password, is_admin) VALUES ('zhujun', '$2a$10$9u5ozAyJWkmZnJ4rSHhRlOXupPI144NP3px0uGboVAMH4oPQLvkmO', 1);
 INSERT INTO users (username, password, is_admin) VALUES ('xinyan', '$2a$10$CiNxJ.OtQc9/DKiRX79Z3OfglNcAhDC9GCxbxovOCA0JSkjxvV9eS', 1);
 
-INSERT INTO users (id, username, password, currency, is_admin) VALUES (5, '1p','$2a$10$RW0wv3ZqL9SaRUFL7PvNvepJXFMMuenmXmLmK8vxqZGmWkKTolI9i', 40, 0);
+INSERT INTO users (id, username, password, currency, is_admin) VALUES (5, '1p','$2a$10$RW0wv3ZqL9SaRUFL7PvNvepJXFMMuenmXmLmK8vxqZGmWkKTolI9i', 400, 0);
 INSERT INTO users (id, username, password, currency, is_admin) VALUES (6, '2p','$2a$10$zsD3aTLRYeM9593i4.DBB./zHTsMa0XvSzlZv/4T2r2cZHpW0twqK',20, 0);
 
 INSERT INTO goods (id,user_id,name,price,tag,size, picture, rate_if,description,bought) VALUES (999,6,'Bomber',32,'Top','M','t5.png', 0,'A high-polish pin with a deck of cards graphic, as well as a longline silhouette, front zipper, front slant pockets, a quilted lining, long sleeves with one zippered utility pocket, and ribbed trim.',1);
