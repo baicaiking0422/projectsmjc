@@ -3,11 +3,11 @@
 {% block body %}
     <h1>Second Hand Shopping</h1>
     <p class="lead">This is a shopping website for second hand exchange.</p>
-
+    <div id="session" name="{{session.username}}"></div>
     <div class="input-group">
-      <input type="text" class="form-control" placeholder="Search for...">
+      <input type="text" class="form-control" id="indexSearch" placeholder="Search for...">
       <span class="input-group-btn">
-        <button class="btn btn-default" type="button">Go!</button>
+        <button class="btn btn-default" id="indexSearchSubmit" type="button">Go!</button>
       </span>
     </div><!-- /input-group -->
    </br>
@@ -21,7 +21,8 @@
   <li role="presentation"><a href="/items?tag=other">Others</a></li>
   </ul> -->
 
- <div class="col-xs-3" id="menu"> Menu
+<div class="navbar navbar-default row">
+ <div class="col-xs-4" id="menu"> Menu
       <select class="form-control" id="tag">
         <option>All</option>
         <option>Top</option>
@@ -58,7 +59,7 @@
   </li>
   </ul> -->
 
-  <div id="filters" class="row col-xs-9">
+  <div id="filters" class="row col-xs-8">
   <div class="form-group col-xs-4">Size
   <select class="form-control" id="size">
     <option>all</option>
@@ -72,15 +73,15 @@
 <div class="form-group col-xs-4">Price
   <select class="form-control" id="price">
     <option>all</option>
-    <option>Under $100</option>
-    <option>$100 - $200</option>
-    <option>$300 - $400</option>
-    <option>over $400</option>
+    <option>Under $10</option>
+    <option>$11 - $20</option>
+    <option>$21 - $30</option>
+    <option>$31 - $40</option>
+    <option>over $40</option>
   </select>
 </div>
 </div>
-
-
+</div>
 <div id="indexResult">
  <!--  <div class="row" id="items">
     <div class="item col-sm-4"><img src="img/banana1.jpg"></div>
@@ -98,11 +99,8 @@
     <div class="item col-sm-4"><img src="img/banana9.jpg"></div>
   </div> --></div>
 
-  <nav aria-label="...">
-  <ul class="pager">
-    <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span> Previous</a></li>
-    <li class="next"><a href="#">Next <span aria-hidden="true">&rarr;</span></a></li>
-  </ul>
+  <nav aria-label="..." class="btn-group" role="group" id="indexPage">
+  
 </nav>
 
 <script src="js/index.js"></script>

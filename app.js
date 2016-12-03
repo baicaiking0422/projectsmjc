@@ -311,4 +311,3 @@ app.get('/good', function(req, res) {
 });
 //=========Zhujun Wang===End====
 
-//db.close();
