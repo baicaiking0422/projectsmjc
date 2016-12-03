@@ -113,7 +113,7 @@ $(document).ready(function() {
                             + "<td align='center'>" + response["goods"][i].name
                             + "</td><td align='center'>" + response["goods"][i].price
                             + "</td><td align='center'>" + response["goods"][i].size
-                            + "</td>" + "<td align='center'><input type='button' value='rate'></td>";
+                            + "</td>" + "<td align='center' class='rate'><a href='/feedback?item_id="+response["goods"][i].id + "'><input type='button' value='rate'></a></td>";
                 }
                 tableR = tableR + "</table>";
                 $("#result").html(tableR);
@@ -121,6 +121,7 @@ $(document).ready(function() {
 			}
 		});
 	});
+
 
 
 	$("#wallet").click(function(){
