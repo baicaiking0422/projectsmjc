@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <script src="js/admin.js"></script>
+
+    <div id="rightPanel" class="col-md-3">
+
+      <div id="usersCol">
+        <h1>Users</h1>
+
+        <ul id="userFunctions">
+          <li><input type="button" name="add_user_but"
+                 id="add_user_but" class="btn btn-info user_but"
+                 value="Add User"/>
+          </li>
+
+          <li><input type="button" name="delete_user_but"
+                 id="delete_user_but" class="btn btn-info user_but"
+                 value="Delete User"/>
+          </li>
+
+          <li><input type="button" name="edit_user_info_but"
+                 id="edit_user_info_but" class="btn btn-info user_but"
+                 value="Edit User Information"/>
+          </li>
+
+          <li><input type="button" name="display_users_but"
+                 id="display_users_but" class="btn btn-info user_but"
+                 value="Show All Users"/>
+          </li>
+        </ul>
+      </div>
+
+      <div id="goodsCol">
+        <h1>Goods</h1>
+
+        <ul id="goodsFunctions">
+          <li><input type="button" name="add_item_but"
+                 id="add_item_but" class="btn btn-success item_but"
+                 value="Add Item"/>
+          </li>
+
+          <li><input type="button" name="delete_item_but"
+                 id="delete_item_but" class="btn btn-success item_but"
+                 value="Delete Item"/>
+          </li>
+
+          <li><input type="button" name="edit_item_info_but"
+                 id="edit_item_info_but" class="btn btn-success item_but"
+                 value="Edit Item Information"/>
+          </li>
+
+          <li><input type="button" name="display_items_but"
+                 id="display_items_but" class="btn btn-success item_but"
+                 value="Show All Items"/>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="admin_display" class="col-md-7">
+      <!-- display the form that needs to be filled for adding an user-->
+      <div id="add_user_display">
+        <form method="post" id="add_user_form" action="/admin">
+
+          <div class="form-group">
+            <label for="username" class="form-label">Username: </label>
+            <input type="text" class="form-control" id="username2" 
+                   placeholder="Enter the username" required>
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Password: </label>
+            <input type="password" class="form-control" id="password2" 
+                   placeholder="Enter the password" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Email address: </label>
+            <input type="text" class="form-control" id="email_address2" 
+                   placeholder="Enter the email address" 
+                   required>
+          </div>
+
+          <div class="form-group">
+            <label for="phone" class="form-label">Phone number: </label>
+            <input type="text" class="form-control" id="phone2" 
+                   pattern="\(?\d{3}\)?-?\d{3}-?\d{4}"
+                   placeholder="Enter the phone number" required>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-danger" 
+                    id="submit_user_but">Add</button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- display the options for edit user information-->
+      <div id="edit_user_option">
+        <form method="get" id="edit_user_form" action="/admin">
+
+          <!-- ask admin to enter the username of the user that wants to modify 
+          his or her information -->
+          <div class="form-group">
+            <label class="form-label"
+                   for="username">User whose info is to be modified: </label>
+            <input type="text" class="form-control" id="username3" 
+                   placeholder="Enter the username of the user" 
+                   required>
+          </div>
+
+          <strong>Only fill out the text fields whose contents needs modification</strong>
+
+          <div class="form-group">
+            <label for="username" class="form-label">New username: </label>
+            <input type="text" class="form-control" id="new_username" 
+                   placeholder="Enter the new username" required>
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">New password: </label>
+            <input type="password" class="form-control" id="new_password" 
+                   placeholder="Enter the new password" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">New email address: </label>
+            <input type="text" class="form-control" id="new_email_address" 
+                   placeholder="Enter the new email address" 
+                   required>
+          </div>
+
+          <div class="form-group">
+            <label for="phone" class="form-label">New phone number: </label>
+            <input type="text" class="form-control" id="new_phone" 
+                   pattern="\(?\d{3}\)?-?\d{3}-?\d{4}"
+                   placeholder="Enter the new phone number" required>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-danger" 
+                    id="edit_user_but">Edit</button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- display for show all user -->
+      <div id="show_users_display">
+        <table id="users_table" class="table table-condensed"></table>
+      </div>
+
+      <!-- display the form that needs to be filled for adding an item-->
+      <div id="add_item_display">
+        <form method="post" id="add_item_form" action="/admin">
+
+          <div class="form-group">
+            <label for="name" class="form-label">Item Name: </label>
+            <input type="text" class="form-control" id="name2" name="name2"
+                   placeholder="Enter the name of the item" required>
+          </div>
+
+          <div class="form-group">
+            <label for="price" class="form-label">Price ($): </label>
+            <input type="text" class="form-control" id="price2" name="price2"
+                   placeholder="Enter the price of the item" required>
+          </div>
+
+          <div class="form-group">
+            <label for="size" class="form-label">Size: </label>
+            <select name="size2" id="size2" class="form-control">
+              <option>XS</option>
+              <option>S</option>
+              <option>M</option>
+              <option>L</option>
+              <option>XL</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="tag" class="form-label">Tag: </label>
+            <select class="form-control" name="tag2" id="tag2">
+              <option>Top</option>
+              <option>Bottom</option>
+              <option>Dress</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="seller" class="form-label">Seller: </label>
+            <input type="text" class="form-control" id="seller2" name="seller2"
+                   placeholder="Enter the username of the seller (not necessary)">
+          </div>
+
+          <div class="form-group">
+            <label for="description" class="form-label">Description: </label>
+            <input type="text" class="form-control" id="description2" 
+                   name="description2"
+                   placeholder="Enter the description of the item (not necessary)">
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-warning" 
+                    id="submit_item_but">Add</button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- display for show all items -->
+      <div id="show_items_display">
+        <table id="items_table" class="table table-condensed"></table>
+      </div>
+
+      <!-- display for delete user -->
+      <div id="delete_user_display">
+        <form method="post" id="delete_user_field" action="/admin">
+
+          <div class="form-group">
+            <label for="delete_user" class="form-label">Username: </label>
+            <input type="text" class="form-control" id="delete_user" 
+                   name="delete_user"
+                   placeholder="Enter the username of the user that is to be deleted"
+                   required>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-danger" 
+                    id="delete_user_submit">Delete</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- display for delete item -->
+      <div id="delete_item_display">
+        <form method="post" id="delete_item_field" action="/admin">
+
+          <div class="form-group">
+            <label for="delete_item" class="form-label">Item ID: </label>
+            <input type="text" class="form-control" id="delete_item" 
+                   name="delete_item"
+                   placeholder="Enter the ID of the Item that is to be deleted"
+                   required>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-warning" 
+                    id="delete_item_submit">Delete</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- display the options for edit item information-->
+      <div id="edit_item_option">
+        <form method="get" id="edit_item_form" action="/admin">
+
+          <!-- ask admin to enter the ID of the item that needs to be modify-->
+          <div class="form-group">
+            <label class="form-label"
+                   for="item ID">ID of item to be modified: </label>
+            <input type="text" class="form-control" id="item_id" 
+                   placeholder="Enter the ID of the item" 
+                   required>
+          </div>
+
+          <strong>Only fill out the text fields whose contents needs modification</strong>
+
+          <div class="form-group">
+            <label for="item_name" class="form-label">New Item Name: </label>
+            <input type="text" class="form-control" id="new_item_name" 
+                   placeholder="Enter the new name for item" required>
+          </div>
+
+          <div class="form-group">
+            <label for="new_price" class="form-label">New Price: </label>
+            <input type="text" class="form-control" id="new_price" 
+                   placeholder="Enter the new price for item" required>
+          </div>
+
+          <div class="form-group">
+            <label for="new_size" class="form-label">New Size: </label>
+            <select name="new_size" id="new_size" class="form-control">
+              <option>(No change)</option>
+              <option>XS</option>
+              <option>S</option>
+              <option>M</option>
+              <option>L</option>
+              <option>XL</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="new_tag" class="form-label">New Tag: </label>
+            <select class="form-control" name="new_tag" id="new_tag">
+              <option>(No change)</option>
+              <option>Top</option>
+              <option>Bottom</option>
+              <option>Dress</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="new_description" 
+                   class="form-label">New Description: </label>
+            <input type="text" class="form-control" id="new_description" 
+                   placeholder="Enter the new description" required>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-warning" 
+                    id="edit_item_but">Edit</button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+
+ 
+
+
+{% endblock %}
+

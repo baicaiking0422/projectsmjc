@@ -764,3 +764,368 @@ app.get('/feedback', function(req, res) {
 });
 //=========Zhujun Wang===End====
 
+//=========Xinyan Jiang===Start================================================
+
+// admin home page
+app.get('/admin', function(req, res) {
+  res.render('admin.html');
+});
+
+
+app.post('/admin', function(req, res){
+  if (req.query.user) { // edit user information is selected
+    var user = req.query.user; 
+    var username = req.query.username;
+    var password = req.query.password;
+    var email = req.query.email;
+    var phone = req.query.phone;
+    var username_needs_change = false;
+
+    // find if user with username "user" exists
+    db.all('SELECT * FROM users WHERE username = ?', [user], 
+           function(err, rows) {
+      if (err) {
+        throw err;
+      }
+
+      if (!rows || rows.length > 1) {
+        throw "this shouldn't happen";
+      }
+
+      if (rows.length == 0) { // no user is found with username "user"
+        res.send("No such user exists.");
+      } else if (rows.length == 1) { // user exists
+        var id = rows[0].id; // find the unique id of the user 
+
+        // Check which attribute in users needs to be modified. If any field
+        // does not need to be changed, replace the field with the old content
+        if (password == undefined || password == '') {
+          // password doesn't need to be changed 
+          password = rows[0].password;
+        }
+
+        if (email == undefined || email == '') { // email is not changed
+          email = rows[0].email;
+        } 
+
+        if (phone == undefined || phone == '') { // phone number is not changed
+          phone = rows[0].phone;
+        }
+
+        if (username == undefined || username == '') { // username unchanged
+          username = user;
+          username_needs_change = false;
+        } else { // username needs to be changed
+          username_needs_change = true;
+        }
+
+        // Check if the new username is already in use by someone else
+        db.all('SELECT id FROM users WHERE username = ?', [username], 
+               function(err2, rows2) {
+          if (err2) {
+            throw err2;
+          }
+
+          if (!rows2 || rows2.length > 1) {
+            throw "this shouldn't happen";
+          }
+
+          if (rows2.length == 1 && username_needs_change) {
+            res.send("This username is already in use. Try another name.");
+          } else { // the username does not exist
+            // update the user's info
+            db.run('UPDATE users SET username = ?, password = ?, ' + 
+                    'email = ?, phone = ? WHERE id = ?', 
+                    [username, password, email, phone, id], 
+                    function(err3, rows3) {
+              if (err3) {
+                throw err3;
+              } else {
+                res.send("Information is changed successfully");
+              }
+            });
+          }
+        });  
+      } 
+    });
+  } else if (req.query.itemID) { // edit item information is selected
+    var item = req.query.itemID;
+    var name = req.query.name;
+    var price = req.query.price;
+    var size = req.query.size;
+    var tag = req.query.tag;
+    var description = req.query.description;
+
+    // find if item with ID "item" exists
+    db.all('SELECT * FROM goods WHERE id = ?', [item], function(err, rows) {
+      if (err) {
+        throw err;
+      }
+
+      if (!rows || rows.length > 1) {
+        throw "this shouldn't happen";
+      }
+
+      if (rows.length == 0) { // no item is found with the given ID
+        res.send("No such item exists.");
+      } else if (rows.length == 1) { // item exists
+        // Check which attribute in items needs to be modified. If any field
+        // needs to be changed, replace the field with the new content
+        if (name == null || name == "") { // item name doesn't need change
+          name = rows[0].name;
+        }
+
+        if (price == null || price == "") { // price is not changed
+          price = rows[0].price;
+        } 
+
+        if (size == '(No change)') { // size is not changed
+          size = rows[0].size;
+        }
+
+        if (tag == '(No change)') { // tag is not changed
+          tag = rows[0].tag;
+        }
+
+        if (description == null || description == "") {
+          description = rows[0].description;
+        }
+
+        if (isNaN(price)) { // price is not a valid number
+          res.send("Price is not a valid number.");
+        } else { // update item info
+          db.run('UPDATE goods SET name = ?, price = ?, ' + 
+                  'size = ?, tag = ?, description = ? WHERE id = ?', 
+                  [name, price, size, tag, description, item], 
+                  function(err3, rows3) {
+            if (err3) {
+              throw err3;
+            } else {
+              res.send("Information is updated successfully");
+            }
+          });     
+        }     
+      } 
+    });
+  } else if (req.body.deleteUser) { // delete user is selected
+    var username = req.body.deleteUser;
+
+    // check if user with username exists
+    db.all("SELECT id FROM users WHERE username = ?", [username], 
+           function(err, rows) {
+      if(err) {
+        throw err;
+      }
+      if(!rows || rows.length > 1) {
+        throw "this shouldn't happen";
+      } 
+
+      if (rows.length == 0) { // no user is found 
+        res.send("No such user exists.");
+      } else if (rows.length == 1) { // an user is found
+        var id = rows[0].id; // find the unique id of the user 
+
+        //delete the user
+        db.run("DELETE FROM users WHERE username = ?", [username], 
+               function(err2, rows) {
+          if (err2) {
+            throw err2;
+          } else {
+            res.send("User is deleted successfully");
+            // delete all item the user the user is selling or sold
+            db.run("DELETE FROM goods WHERE user_id = ?", [id], 
+                   function(err3, rows) {
+              if (err3) {
+                throw err3;
+              }
+            });
+          }
+        });
+      }
+    });
+  } else if (req.body.deleteItem) { // delete item is selected
+    var itemID = req.body.deleteItem;
+
+    // Find all attributes of item with id if possible
+    db.all("SELECT * FROM goods WHERE id = ?", [itemID], function(err, rows) {
+      if(err) {
+        throw err;
+      }
+
+      if(!rows || rows.length > 1) {
+        throw "this shouldn't happen";
+      } 
+
+      if (rows.length == 0) { // no item is found 
+        res.send("No such item.");
+
+      } else if (rows.length == 1) { // the item is found then delete the item
+
+        db.run("DELETE FROM goods WHERE id = ?", [itemID], 
+               function(err2, rows) {
+          if (err2) {
+            throw err2;
+          } else {
+            res.send("Item is deleted successfully");
+          }
+        });
+      }
+    });
+  } else if (req.query.name) { // add item is selected
+    var name = req.query.name;
+    var price = req.query.price;
+    var size = req.query.size;
+    var tag = req.query.tag;
+    var seller = req.query.seller;
+    var description = req.query.description;
+
+    // Check if all four fields are filled
+    if (name == '' || price == '' || size == '' || tag == '') {
+
+      re = {status: "All fields must be filled."};
+      res.send(JSON.stringify(re));
+
+    } else if (isNaN(price)) { // if price is not a valid number
+
+      re = {status: "Price has to be a valid number."};
+      res.send(JSON.stringify(re));
+
+    } else {
+      if (description == '') { 
+        description = 'none';
+      } 
+
+      // create item 
+      if (seller == '') { 
+        // admin adds items, set default seller to be one of the admin
+        seller = 'xueqi'; 
+      } 
+
+      // add item to database
+      create_item(seller, name, price, size, tag, description, 
+                  function(err, seller) {
+        if (err) {
+          res.send(JSON.stringify({status: err}));
+        } else {
+          re = {status:"Item added successfully!"};
+          res.send(JSON.stringify(re));
+        }
+      });     
+    }
+  } else { // add user is selected
+    var re;
+    var username = req.query.username;
+    var password = req.query.password;
+    var email = req.query.email;
+    var phone = req.query.phone;
+    var email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+    var phone_regex = /\(?\d{3}\)?-?\d{3}-?\d{4}/;
+
+    // Check if all four fields are filled correctly
+    if (password.replace(/\s+/g, '') == '' || 
+        username.replace(/\s+/g, '') == '') {
+
+      re = {status: "Username and password must be filled."};
+      res.send(JSON.stringify(re));
+
+    } else if (email.replace(/\s+/g, '') != '' && 
+               email.match(email_regex) == null) { // check validity of email
+
+      re = {status: "Invalid format for email."};
+      res.send(JSON.stringify(re));
+
+    } else if (phone.replace(/\s+/g, '') != '' && 
+               phone.match(phone_regex) == null) { // Check validity of phone
+
+      re = {status: "Invalid format for phone number."};
+      res.send(JSON.stringify(re));
+
+    } else { // Check if user exists
+
+      if (email == '') {
+        email = " ";
+      } 
+      if (phone == '') {
+        phone = " ";
+      }
+
+      // create the user
+      create_user(username, password, password, email, phone, 
+                  function(err, username) {
+
+        if (err) {
+          //res.render('signup.html', {error: err});
+          res.send(JSON.stringify({status: err}));
+        } else {
+          re = {status:"User added successfully!"};
+          res.send(JSON.stringify(re));
+        }
+      });
+    }
+  } 
+});
+
+// send all the user info to admin.jss
+app.get('/admin/allUsers', function(req, res) {
+  // get all attributes of all rows from users
+  db.all("SELECT * FROM users", [],function(err, rows) {
+    if(err) {
+      throw err;
+    }
+    if(!rows) {
+      throw "this shouldn't happen";
+    } else {
+      // contains all the users and their corresponding info
+      var users = []; 
+
+      // loop over each row
+      for (var i = 0; i < rows.length; i++) {
+        var id = rows[i].id;
+        var username = rows[i].username;
+        var email = rows[i].email;
+        var phone = rows[i].phone;
+
+        if(rows[i].email == null) {
+          email = '';
+        }
+
+        if (rows[i].phone == null) {
+          phone = '';
+        }
+
+        var row = {"id" : id, "username" : username,
+                   "email" : email, "phone" : phone};
+
+        users.push(row); // append each row users
+      } 
+      res.send(users);    
+    } 
+  }); 
+});
+
+// send all item info to admin.js
+app.get('/admin/allItems', function(req, res) {
+  // find all items and their respective info from goods table 
+  db.all("SELECT * FROM goods", [],function(err, rows) {
+    if(err) {
+      throw err;
+    }
+    if(!rows) {
+      throw "this shouldn't happen";
+    } else {
+      var items = []; // contains all the usernames and ids
+
+      // loop over each row
+      for (var i = 0; i < rows.length; i++) {
+        var row = {"id" : rows[i].id, "name" : rows[i].name,
+                   "price" : rows[i].price, "size" : rows[i].size,
+                   "tag" : rows[i].tag, "seller" : rows[i].user_id};
+        items.push(row);
+      } 
+      res.send(items);    
+    } 
+  });
+});
+
+//=========Xinyan Jiang===End==================================================
+
