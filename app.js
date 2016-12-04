@@ -10,6 +10,31 @@ var port = process.env.PORT || 3000;
 var db = new sqlite3.Database('db.sqlite');
 db.serialize();
 
+
+var app = express();
+nunjucks.configure('views', { autoescape: true, express: app });
+
+app.use(express.static(path.join(__dirname, 'static')));
+app.use(bodyParser.urlencoded({ extended: false })); 
+app.use(session({ secret: 'I am actually a potato', resave: false, saveUninitialized: false }));
+
+app.listen(port, function () {
+  console.log('Vintage app listening on port ' + port + '!');
+});
+
+// Expose session variables to views
+app.use(function(req, res, next) {
+  res.locals.session = req.session;
+  next();
+});
+
+app.get('/', function (req, res) {
+  res.render('index.html');
+});
+
+
+//=========Xueqi Fan===Start=========
+
 /**
  * Helper function for interacting with database.
  */
@@ -35,31 +60,6 @@ function create_user(username, password, password_confirmation, email_address, p
   }
 }
 
-
-
-var app = express();
-nunjucks.configure('views', { autoescape: true, express: app });
-
-app.use(express.static(path.join(__dirname, 'static')));
-app.use(bodyParser.urlencoded({ extended: false })); 
-app.use(session({ secret: 'I am actually a potato', resave: false, saveUninitialized: false }));
-
-app.listen(port, function () {
-  console.log('Vintage app listening on port ' + port + '!');
-});
-
-// Expose session variables to views
-app.use(function(req, res, next) {
-  res.locals.session = req.session;
-  next();
-});
-
-app.get('/', function (req, res) {
-  res.render('index.html');
-});
-
-
-//=========Xueqi Fan===Start=========
 app.post('/signin', function(req, res) {
   //console.log(req.session);
   var reqUsername = req.body.username;
@@ -136,6 +136,13 @@ app.post('/signup', function(req, res) {
   var money = req.body.currency;
   //console.log(money);
 
+  //do not allow all space in usernam or password;
+  var user = username.replace(/\s+/g, '');
+  var pwd = password.replace(/\s+/g, '');
+  if (user == '' || pwd == ''){
+    res.render('signup.html', {error: 'Could not type all space in username or password'});
+    return;
+  }
   create_user(username, password, password_confirmation, email_address, phone, money, function(err, username) {
     if (err) {
       res.render('signup.html', {error: err});
@@ -337,7 +344,7 @@ app.post("/addingGoods", function(req, res){
 function create_item(username, itemname, price, size, tag, description, callback) {
   db.all('SELECT id FROM users WHERE username = ?', [username] ,function(err, rows){
     if (rows.length == 0 || rows.length > 1){
-      callback('could not happen');
+      callback('User does not exists!');
       return;
     }
     var userid = rows[0].id;
@@ -424,20 +431,20 @@ function updatePassword(username, pwd, pwd_con, callback){
     callback('Password does not match confirmation');
   }else{
     var pw_hash = bcrypt.hashSync(pwd, 10);
-    db.run("UPDATE users SET password = ?", [pw_hash], function(err){
+    db.run("UPDATE users SET password = ? WHERE username=?", [pw_hash, username], function(err){
         callback(err, username);
     });
   }
 }
 
 function updateEmail(username, email, callback){
-  db.run("UPDATE users SET email = ?", [email], function(err){
+  db.run("UPDATE users SET email = ? WHERE username=?", [email, username], function(err){
         callback(err, username);
     });
 }
 
 function updatePhone(username, phone, callback){
-  db.run("UPDATE users SET phone = ?", [phone], function(err){
+  db.run("UPDATE users SET phone = ? WHERE username=?", [phone, username], function(err){
         callback(err, username);
     });
 }
@@ -768,7 +775,17 @@ app.get('/feedback', function(req, res) {
 
 // admin home page
 app.get('/admin', function(req, res) {
-  res.render('admin.html');
+  var reqUsername = req.query.username;
+  if (reqUsername !== undefined){
+   db.all('SELECT * FROM users WHERE username = ?', [reqUsername], function(err, rows){
+    if (rows[0].is_admin == 1){
+      res.render('admin.html');
+    }else{
+      res.redirect('/');
+    }
+  });}else{
+    res.redirect('/');
+   } 
 });
 
 
@@ -1067,6 +1084,10 @@ app.post('/admin', function(req, res){
 
 // send all the user info to admin.jss
 app.get('/admin/allUsers', function(req, res) {
+  reqUsername = req.query.username;
+  if (reqUsername !== undefined){
+    db.all('SELECT * FROM users WHERE username = ?', [reqUsername], function(err, rows){
+      if (rows[0].is_admin == 1){
   // get all attributes of all rows from users
   db.all("SELECT * FROM users", [],function(err, rows) {
     if(err) {
@@ -1100,11 +1121,19 @@ app.get('/admin/allUsers', function(req, res) {
       } 
       res.send(users);    
     } 
-  }); 
+  });}else{
+    res.redirect('/');
+  }});}else{
+      res.redirect('/');
+    }
 });
 
 // send all item info to admin.js
 app.get('/admin/allItems', function(req, res) {
+  reqUsername = req.query.username;
+  if (reqUsername !== undefined){
+    db.all('SELECT * FROM users WHERE username = ?', [reqUsername], function(err, rows){
+      if (rows[0].is_admin == 1){
   // find all items and their respective info from goods table 
   db.all("SELECT * FROM goods", [],function(err, rows) {
     if(err) {
@@ -1124,7 +1153,12 @@ app.get('/admin/allItems', function(req, res) {
       } 
       res.send(items);    
     } 
-  });
+  });}else{
+    res.redirect('/');
+  }});}
+    else{
+      res.redirect('/');
+    }
 });
 
 //=========Xinyan Jiang===End==================================================

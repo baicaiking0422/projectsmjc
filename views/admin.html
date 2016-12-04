@@ -5,7 +5,7 @@
 
     <div id="rightPanel" class="col-md-3">
 
-      <div id="usersCol">
+      <div id="usersCol" name="{{session.username}}">
         <h1>Users</h1>
 
         <ul id="userFunctions">
@@ -99,7 +99,7 @@
 
       <!-- display the options for edit user information-->
       <div id="edit_user_option">
-        <form method="get" id="edit_user_form" action="/admin">
+        <form method="get" id="edit_user_form" action="/admin?username={{session.userna}}">
 
           <!-- ask admin to enter the username of the user that wants to modify 
           his or her information -->
@@ -255,7 +255,7 @@
 
       <!-- display the options for edit item information-->
       <div id="edit_item_option">
-        <form method="get" id="edit_item_form" action="/admin">
+        <form method="get" id="edit_item_form" action="/admin?username={{session.uername}}">
 
           <!-- ask admin to enter the ID of the item that needs to be modify-->
           <div class="form-group">

@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+    var adminUser = $('#usersCol').attr("name");
     // booleans for button onclicks. The boolean value of the buttons becomes
     // false when the button is being pressed down, and true when the buttons
     // are being released
@@ -29,7 +29,7 @@ $(document).ready(function(){
     // the right
 	$("#add_user_but").click(function() {
         $.ajax({
-            url: "/admin",
+            url: "/admin?username=" + adminUser,
             type: "GET",
             success: function(response) {
                 // 'add user' button is pressed down
@@ -89,7 +89,7 @@ $(document).ready(function(){
     // appears on the right
     $("#edit_user_info_but").click(function() {
         $.ajax({
-            url: "/admin",
+            url: "/admin?username=" + adminUser,
             type: "GET",
             success: function(response) {
                 // 'edit user' button is pressed down
@@ -156,7 +156,7 @@ $(document).ready(function(){
     // appear on the right
     $("#display_users_but").click(function() {
         $.ajax({
-            url: "/admin/allUsers",
+            url: "/admin/allUsers?username="+adminUser,
             type: "GET",
             success: function(response) {
                 // 'show all user' button is pressed down
@@ -195,7 +195,7 @@ $(document).ready(function(){
     // appears on the right
     $("#delete_user_but").click(function() {
         $.ajax({
-            url: "/admin",
+            url: "/admin?username="+ adminUser,
             type: "GET",
             success: function(response) {
                 // 'delete user' button is pressed down
@@ -256,7 +256,7 @@ $(document).ready(function(){
     // the right
     $("#add_item_but").click(function() {
         $.ajax({
-            url: "/admin",
+            url: "/admin?username="+adminUser,
             type: "GET",
             success: function(response) {
                 // 'add item' button is pressed down
@@ -323,7 +323,7 @@ $(document).ready(function(){
     // appears on the right
     $("#edit_item_info_but").click(function() {
         $.ajax({
-            url: "/admin",
+            url: "/admin?username="+adminUser,
             type: "GET",
             success: function(response) {
                 // 'edit item info' button is pressed down
@@ -389,7 +389,7 @@ $(document).ready(function(){
     // appear on the right
     $("#display_items_but").click(function() {
         $.ajax({
-            url: "/admin/allItems",
+            url: "/admin/allItems?username="+adminUser,
             type: "GET",
             success: function(response) {
                 // 'show all item' button is pressed down
@@ -428,7 +428,7 @@ $(document).ready(function(){
     // appears on the right
     $("#delete_item_but").click(function() {
         $.ajax({
-            url: "/admin",
+            url: "/admin?username="+ adminUser,
             type: "GET",
             success: function(response) {
                 // 'delete user' button is pressed down
