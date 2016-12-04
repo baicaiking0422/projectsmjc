@@ -128,3 +128,87 @@ img {
 #baseSignin {
 	margin-top: 1%;
 }
+
+#usersCol {
+  margin: 10px;
+  border: 5px solid black;
+  border-radius: 20px;
+  padding-bottom: 10px;
+  padding-right: 30px;
+
+}
+
+#userFunctions, #goodsFunctions {
+  list-style-type: none;
+  text-align: left;
+  max-width: 80%;
+
+}
+
+#goodsCol {
+  margin: 10px;
+  border: 5px solid black;
+  border-radius: 20px;
+  padding-bottom: 10px;
+  padding-right: 30px;
+  margin-top: 30px;
+}
+
+.user_but, .item_but {
+  margin: 5px;
+}
+
+#rightPanel {
+  float: left;
+}
+
+#admin_display {
+  min-height: 400px;
+  margin-top: 30px;
+  float: right;
+  margin-left: 20px;
+  border: 5px solid black;
+  border-radius: 20px;
+  width: 72%;
+}
+
+.form-group {
+  text-align: left;
+  margin: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+#show_users_display, #show_items_display {
+  margin: 30px;
+}
+#users_table th, td {
+  text-align: center;
+  border-radius: 6px;
+}
+
+#users_table tr:nth-child(even) {
+  background-color: #87CEFA;
+}
+#users_table tr:nth-child(odd) {
+  background-color: #D0ECF9;
+}
+
+#items_table th, td {
+  text-align: center;
+  border-radius: 6px;
+}
+
+#items_table tr:nth-child(even) {
+  background-color: #7ECC98;
+}
+
+#items_table tr:nth-child(odd) {
+  background-color: #D4F5DF;
+}
