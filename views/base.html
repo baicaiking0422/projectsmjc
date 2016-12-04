@@ -57,6 +57,7 @@
         <p class="navbar-text navbar-right">Signed in as <strong>{{ session.username }}</strong>
         {% if session.is_admin %}
         <a id="adminPage" class="btn btn-primary navbar-btn" role="button" href="#">Admin Page</a>
+        <a id="userInfo" class="btn btn-primary navbar-btn" role="button" href="/userinfo?username={{session.username}}">User Info</a>
         {% else %} 
         <a id="userInfo" class="btn btn-primary navbar-btn" role="button" href="/userinfo?username={{session.username}}">User Info</a>
         {% endif %}
