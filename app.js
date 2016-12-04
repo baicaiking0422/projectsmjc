@@ -366,7 +366,7 @@ app.get("/wallet", function(req, res){
   if(!rows) {
       throw "this shouldn't happen";
     }
-    let obj = {"currency" : rows[0].currency};
+    var obj = {"currency" : rows[0].currency};
     res.send(JSON.stringify(obj));
   });
 });
@@ -383,9 +383,9 @@ app.post("/wallet", function(req, res){
     if(!rows) {
       throw "this shouldn't happen";
     } 
-    let temp = parseInt(rows[0].currency);
-    let newAmount = rows[0].currency + amount;
-    console.log("new amount is " + newAmount);
+    var temp = parseInt(rows[0].currency);
+    var newAmount = rows[0].currency + amount;
+    //console.log("new amount is " + newAmount);
     db.run("UPDATE users SET currency = ?", [newAmount], function(err2){
       if (err2){
         throw err2;
@@ -410,10 +410,10 @@ app.get("/message", function(req, res){
   if(!rows) {
       throw "this shouldn't happen";
     }
-    console.log(rows);
-    let len = rows.length;
-    for (let i = 0; i < len; i ++){
-      let obj = {"name":"","message":""};
+    //console.log(rows);
+    var len = rows.length;
+    for (var i = 0; i < len; i ++){
+      var obj = {"name":"","message":""};
       obj["name"] = rows[i].senderName;
       obj["message"] = rows[i].message;
       re[i] = obj;
@@ -563,7 +563,7 @@ app.post('/send', function(req, res){
 // usr info
 app.get('/userinfo', function(req, res) {
   var reqUsername = req.query.username;
-  console.log("here"+reqUsername);
+ // console.log("here"+reqUsername);
 
   db.all("SELECT id, username, password, email, phone FROM users WHERE username = ? ", [reqUsername], function (err, rows) {
     if (err) {
@@ -576,7 +576,7 @@ app.get('/userinfo', function(req, res) {
     wanteduser["email"] = rows[0].email;
     wanteduser["phone"] = rows[0].phone;
     //console.log(wanteduser);
-    console.log({data: wanteduser});
+    //console.log({data: wanteduser});
     res.render('userinfo.html', {data: wanteduser});
     //res.jsonp(wanteduser);
   });
@@ -584,7 +584,7 @@ app.get('/userinfo', function(req, res) {
 
 app.get('/sold', function(req, res) {
   var reqUsername = req.query.username;
-  console.log("for sold");
+ // console.log("for sold");
 
   db.all("SELECT name, price, size FROM goods,users WHERE user_id = users.id and username = ? ", [reqUsername], function (err, rows) {
     if (err) {
@@ -602,15 +602,15 @@ app.get('/sold', function(req, res) {
         soldlist["goods"].push(single);
 
     }
-    console.log(soldlist);
+    //console.log(soldlist);
     res.json(soldlist);
   });
 });
 
 app.get('/purchase', function(req, res) {
   var reqUsername = req.query.username;
-  console.log("for purchase");
-  console.log(reqUsername);
+  //console.log("for purchase");
+  //console.log(reqUsername);
 
   db.all("SELECT name, price, size FROM goods,users WHERE buyer_id = users.id and username = ? ", [reqUsername], function (err, rows) {
     if (err) {
@@ -628,15 +628,15 @@ app.get('/purchase', function(req, res) {
         purchaselist["goods"].push(single);
 
     }
-    console.log(purchaselist);
+    //console.log(purchaselist);
     res.json(purchaselist);
   });
 });
 
 app.get('/rate', function(req, res) {
   var reqUsername = req.query.username;
-  console.log("for rate");
-  console.log(reqUsername);
+  //console.log("for rate");
+  //console.log(reqUsername);
 
   db.all("SELECT goods.id, name, price, size FROM goods,users WHERE buyer_id = users.id and rate_if = 0 and username = ? ", [reqUsername], function (err, rows) {
     if (err) {
@@ -655,7 +655,7 @@ app.get('/rate', function(req, res) {
         ratelist["goods"].push(single);
 
     }
-    console.log(ratelist);
+   // console.log(ratelist);
     res.json(ratelist);
   });
 });
@@ -682,11 +682,11 @@ app.get('/comments',function(req,res){
 //Add comment for each item
 app.post('/comments',function(req,res){
   var item_id = req.query.id;
-  console.log("post id:" + item_id);
+  //console.log("post id:" + item_id);
   var rating = req.body.rating;
-  console.log("rating: " + rating);
+  //console.log("rating: " + rating);
   var comment = req.body.comment.substring(0,128);
-  console.log("comment: "+comment);
+  //console.log("comment: "+comment);
   
   var query = 'UPDATE  goods SET comments = ?, rate = ?, rate_if = 1 WHERE id = ?';
   var placeholders = [comment, rating, item_id];
@@ -716,7 +716,7 @@ app.post('/buy',function(req,res){
       db.all('SELECT * FROM goods WHERE id = ?', [item_id], function(err,row,current){
       // already sold
         //var current = value;
-        console.log("YuE: "+value);
+       // console.log("YuE: "+value);
         if (value == null || value < row[0].price) {
           res.send("Not Enough");
         }
@@ -724,7 +724,7 @@ app.post('/buy',function(req,res){
           // not sold, update 1 to 0
           db.run('UPDATE goods SET buyer_id = ?, bought = 0 WHERE id = ?', [user_id, item_id], function(err){
             if(err) {
-              console.log(err);
+              //console.log(err);
               res.sendStatus(500);
             }
             else {
@@ -751,7 +751,7 @@ app.get('/good', function(req, res) {
       if(err){
         throw err;
       }
-      console.log(rows[0]);
+     // console.log(rows[0]);
       var row = rows[0];
       res.render('sellinggoods.html',{data: row});
   });
@@ -759,12 +759,12 @@ app.get('/good', function(req, res) {
 
 app.get('/feedback', function(req, res) {
   var item_id = req.query.item_id;
-  console.log("in get feedback" + item_id);
+  //console.log("in get feedback" + item_id);
   db.all("SELECT * FROM goods WHERE goods.id = ? ",[item_id],function(err,rows){
       if(err){
         throw err;
       }
-      console.log(rows[0]);
+      //console.log(rows[0]);
       var row = rows[0];
       res.render('feedback.html',{data: row});
   });
