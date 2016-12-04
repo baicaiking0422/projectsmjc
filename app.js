@@ -995,7 +995,6 @@ app.post('/admin', function(req, res){
     var tag = req.query.tag;
     var seller = req.query.seller;
     var description = req.query.description;
-
     // Check if all four fields are filled
     if (name == '' || price == '' || size == '' || tag == '') {
 
@@ -1065,9 +1064,9 @@ app.post('/admin', function(req, res){
       if (phone == '') {
         phone = " ";
       }
-
+      var money = 0;
       // create the user
-      create_user(username, password, password, email, phone, 
+      create_user(username, password, password, email, phone, money, 
                   function(err, username) {
 
         if (err) {

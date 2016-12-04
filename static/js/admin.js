@@ -299,7 +299,7 @@ $(document).ready(function(){
         var size = $("#size2").val();
         var tag = $("#tag2").val();
         var seller = $("#seller2").val().trim();
-        var description = $("description2").val().trim();
+        var description = $("#description2").val().trim();
         
         if (name == '') { // username is empty
             alert("Item name has to be filled.");
