@@ -668,7 +668,7 @@ app.get('/rate', function(req, res) {
 app.get('/comments',function(req,res){
   var user_id = req.query.id;
   db.all("SELECT goods.name, users.username, goods.comments, CAST((julianday(datetime('now')) - julianday(goods.timestamp))*24 AS integer) AS days_ago " + 
-    "FROM users, goods WHERE users.id = goods.user_id AND users.id = ? AND goods.bought = 0 " + 
+    "FROM users, goods WHERE goods.rate_if = 1 AND users.id = goods.user_id AND users.id = ? AND goods.bought = 0 " + 
     "ORDER BY goods.timestamp DESC LIMIT 10",[user_id], function(err,rows){
       if(err){
         throw err;
@@ -722,16 +722,25 @@ app.post('/buy',function(req,res){
         }
         else {
           // not sold, update 1 to 0
-          db.run('UPDATE goods SET buyer_id = ?, bought = 0 WHERE id = ?', [user_id, item_id], function(err){
-            if(err) {
-              //console.log(err);
-              res.sendStatus(500);
-            }
-            else {
-              var re = {};
-              re["current"] = req.session.username;
-              res.send(JSON.stringify(re));
-            }
+          var rest = value - row[0].price;
+          db.run ('UPDATE users SET currency = ? WHERE username = ?', [rest, req.session.username], function(err){
+          	if (err) {
+          		res.sendStatus(500);
+          	} 
+
+          	else {
+          		db.run('UPDATE goods SET buyer_id = ?, bought = 0 WHERE id = ?', [user_id, item_id], function(err){
+		            if(err) {
+		              //console.log(err);
+		              res.sendStatus(500);
+		            }
+		            else {
+		              var re = {};
+		              re["current"] = req.session.username;
+		              res.send(JSON.stringify(re));
+		            }
+          		});
+          	}
           });
         }
       });
