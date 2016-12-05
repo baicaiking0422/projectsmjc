@@ -667,7 +667,7 @@ app.get('/rate', function(req, res) {
 //Get comments for particular seller
 app.get('/comments',function(req,res){
   var user_id = req.query.id;
-  db.all("SELECT goods.name, users.username, goods.comments, CAST((julianday(datetime('now')) - julianday(goods.timestamp))*24 AS integer) AS days_ago " + 
+  db.all("SELECT goods.name, goods.rate, users.username, goods.comments, CAST((julianday(datetime('now')) - julianday(goods.timestamp))*24 AS integer) AS days_ago " + 
     "FROM users, goods WHERE goods.rate_if = 1 AND users.id = goods.user_id AND users.id = ? AND goods.bought = 0 " + 
     "ORDER BY goods.timestamp DESC LIMIT 10",[user_id], function(err,rows){
       if(err){

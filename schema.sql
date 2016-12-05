@@ -50,7 +50,7 @@ INSERT INTO users (id, username, password, currency, is_admin) VALUES (5, '1p','
 INSERT INTO users (id, username, password, currency, is_admin) VALUES (6, '2p','$2a$10$zsD3aTLRYeM9593i4.DBB./zHTsMa0XvSzlZv/4T2r2cZHpW0twqK',20, 0);
 
 INSERT INTO goods (id,user_id,name,price,tag,size, picture, rate_if,description,bought) VALUES (999,6,'Bomber',32,'Top','M','t5.png', 0,'A high-polish pin with a deck of cards graphic, as well as a longline silhouette, front zipper, front slant pockets, a quilted lining, long sleeves with one zippered utility pocket, and ribbed trim.',1);
-INSERT INTO goods (id,user_id,name,price,tag,size, picture, rate, rate_if,description,bought) VALUES (989,5,'Pink Cardigans',10,'Top','L','t4.png',5,1,'A knit cardigan featuring an open front, long sleeves, and a slight high-low hem.',0);
+INSERT INTO goods (id,user_id,name,price,tag,size, picture, rate_if,description,bought) VALUES (989,5,'Pink Cardigans',10,'Top','L','t4.png',1,'A knit cardigan featuring an open front, long sleeves, and a slight high-low hem.',1);
 INSERT INTO goods (id,user_id,name,price,tag,size, picture, rate, rate_if,description,comments,bought) VALUES (979,5,'Vintage Jean',10,'Bottom','XL','b5.png',2, 1,'A vintage jean, low-washed.','Fit well.',0);
 INSERT INTO goods (id,user_id,name,price,tag,size, picture, rate, rate_if,description,comments,bought) VALUES (969,5,'Overall',12,'Bottom','M','b3.png',3, 1,'Imported. Vintage overall','Love the material and color',0);
 INSERT INTO goods (id,user_id,name,price,tag,size, picture, rate, rate_if,description,comments,bought) VALUES (959,6,'Navy legging',13,'Bottom','S','b4.png',5,1,'Imported. Navy color leggin. Fit well','A little bit tight.',0);

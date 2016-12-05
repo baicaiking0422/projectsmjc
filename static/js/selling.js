@@ -69,8 +69,8 @@ function refresh_comments(){
 		success: function(comments){
 			comments.forEach(function(comment){
 				$('<dt/>').html('Comment on ' + comment.name + ' sold by '+ 
-					comment.username + ' '+ comment.days_ago + 'days ago').appendTo(container);
-				$('<dd/>').html(comment.comments).appendTo(container);
+					comment.username + ' '+ comment.days_ago + 'days ago:').appendTo(container);
+				$('<dd/>').html('Rate: ' + comment.rate + ' -- '+ comment.comments).appendTo(container);
 			});
 		},
 		error: function(jqxhr,status){
