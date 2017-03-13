@@ -25,4 +25,4 @@ As mentioned above, selling page shows the details about the item and the buyer 
 The implementation is as what we designed in our proposal. All the features are fully implemented in our aspect.
 
 #Additional features
-The message part, where seller and buyer can communicate with each other. What's more, we have the rating feature which buyer can rate for the item they purchase.
+The message part, where seller and buyer can communicate with each other. What's more, we have the rating feature which buyer can rate for the item they purchase.# projectsmjc
